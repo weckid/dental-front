@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import {Routes, Route} from "react-router-dom";
+import { Header } from "./components/Header/Header";
+import  MainContent from "./components/Main/MainContent/MainContent"
 
-import './App.css'
 
+function App() {
 
-  return (
+   return (
     <>
-     
+     <Header/>
+     <Routes>
+      <Route path="/MainContent" element={<MainContent/>}></Route>
+     </Routes>
     </>
-  )
-
-
-export default App
+  );
+}
+ 
+export default App;
