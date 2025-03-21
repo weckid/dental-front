@@ -1,0 +1,62 @@
+.footer {
+    background-color: #fff;
+    text-align: center;
+    width: 100%;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    
+  }
+  
+  .foter {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: 97px;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 1200px) {
+    .footer {
+      height: 70px; /* Уменьшаем высоту футера */
+    }
+  
+    .foter {
+      margin-top: 90px; /* Уменьшаем отступ сверху */
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .footer {
+      height: 65px;
+    }
+  
+    .foter {
+      margin-top: 80px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .footer {
+      height: 60px;
+      font-size: 14px; /* Уменьшаем размер шрифта */
+    }
+  
+    .foter {
+      margin-top: 70px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .footer {
+      height: 50px;
+      font-size: 12px; /* Уменьшаем размер шрифта */
+      padding: 0 10px; /* Добавляем отступы по бокам */
+    }
+  
+    .foter {
+      margin-top: 60px;
+    }
+  }

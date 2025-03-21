@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1100px;
+    max-width: 1300px;
     width: 100%;
     background-color: #fff;
     border-radius: 100px;
@@ -17,6 +17,7 @@
   .header .logo {
     width: 60px;
     height: 60px;
+    padding-left: 30px;
   }
   
   .nav {
@@ -76,6 +77,7 @@
     display: flex;
     align-items: center;
     gap: 20px; /* Отступ между элементами */
+    padding-right: 30px;
   }
   
   /* Адаптивность */

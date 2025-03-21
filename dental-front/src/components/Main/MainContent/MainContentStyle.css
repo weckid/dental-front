@@ -1,0 +1,262 @@
+main {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .background_img {
+    background-image: url(/slider1.png);
+    width: 100%;
+    height: 1080px;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    z-index: -1;
+    background-repeat: no-repeat;
+  }
+  
+  .main_info {
+    padding-left: 360px;
+  }
+  
+  .main_info h1 {
+    font-size: 42px;
+    color: #fff;
+    font-weight: bold;
+    padding-top: 200px;
+  }
+  
+  .main_info h1 span {
+    color: #4da7e7;
+  }
+  
+  .main_info h2 {
+    font-size: 30px;
+    color: #fff;
+    font-weight: normal;
+    padding-top: 80px;
+  }
+  
+  .main_info .buttons {
+    padding-top: 100px;
+    display: flex;
+    position: relative;
+    margin-bottom: 50px;
+  }
+  
+  .main_info .buttons .button1 {
+    background: #5ac3fe;
+    border: 3px solid black;
+    border-radius: 50px;
+    padding: 20px 70px;
+    cursor: pointer;
+    margin-right: 80px;
+    transition: 0.9s;
+    margin-left: 0;
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #fff; /* Цвет текста */
+    font-size: 22px; /* Размер текста */
+  }
+  
+  .main_info .buttons .button1 a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 22px;
+  }
+  
+  .main_info .buttons .button1:hover {
+    background-color: #fff;
+    color: #4da7e7; /* Цвет текста при наведении */
+  }
+  
+  .main_info .buttons .button1:hover a {
+    transition: 0.9s;
+    color: #5AC3FE;
+  }
+  
+  .main_info .buttons .button2 {
+    background: #4da7e7;
+    border: 3px solid black;
+    border-radius: 50px;
+    padding: 20px 70px;
+    cursor: pointer;
+    transition: 0.9s;
+    margin-left: 0;
+    text-decoration: none; /* Убираем подчеркивание */
+    color: #fff; /* Цвет текста */
+    font-size: 22px; /* Размер текста */
+  }
+  
+  .main_info .buttons .button2 a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 22px;
+  }
+  
+  .main_info .buttons .button2:hover {
+    background-color: #fff;
+    color: #4da7e7; /* Цвет текста при наведении */
+  }
+  
+  .main_info .buttons .button2:hover a {
+    transition: 0.9s;
+    color: #4da7e7;
+  }
+  
+  .main_info .cards {
+    display: flex;
+    padding-right: 500px;
+    gap: 30px;
+  }
+  
+  .main_info .cards .card {
+    width: 368px;
+    height: 190px;
+    background-color: #fff;
+    border-radius: 25px;
+  }
+  
+  .main_info .cards .card .image {
+    padding-top: 21px;
+    padding-right: 260px;
+    padding-left: 40px;
+  }
+  
+  .main_info .cards .card .card_text p {
+    font-size: 18px;
+    color: black;
+    padding-left: 40px;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 1200px) {
+    .main_info {
+      padding-left: 200px;
+    }
+  
+    .main_info h1 {
+      font-size: 36px;
+      padding-top: 150px;
+    }
+  
+    .main_info h2 {
+      font-size: 26px;
+      padding-top: 60px;
+    }
+  
+    .main_info .buttons {
+      padding-top: 80px;
+    }
+  
+    .main_info .buttons .button1,
+    .main_info .buttons .button2 {
+      padding: 15px 50px;
+    }
+  
+    .main_info .cards {
+      padding-right: 300px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .main_info {
+      padding-left: 100px;
+    }
+  
+    .main_info h1 {
+      font-size: 32px;
+      padding-top: 120px;
+    }
+  
+    .main_info h2 {
+      font-size: 24px;
+      padding-top: 50px;
+    }
+  
+    .main_info .buttons {
+      padding-top: 60px;
+    }
+  
+    .main_info .buttons .button1,
+    .main_info .buttons .button2 {
+      padding: 12px 40px;
+    }
+  
+    .main_info .cards {
+      padding-right: 200px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .main_info {
+      padding-left: 50px;
+    }
+  
+    .main_info h1 {
+      font-size: 28px;
+      padding-top: 100px;
+    }
+  
+    .main_info h2 {
+      font-size: 22px;
+      padding-top: 40px;
+    }
+  
+    .main_info .buttons {
+      padding-top: 50px;
+      flex-direction: column; /* Кнопки в столбик на маленьких экранах */
+      align-items: center; /* Центрируем кнопки */
+      gap: 20px; /* Отступ между кнопками */
+    }
+  
+    .main_info .buttons .button1,
+    .main_info .buttons .button2 {
+      margin-right: 0; /* Убираем отступ справа */
+      width: 80%; /* Ширина кнопок */
+      text-align: center;
+    }
+  
+    .main_info .cards {
+      padding-right: 50px;
+      flex-direction: column; /* Карточки в столбик */
+      align-items: center; /* Центрируем карточки */
+    }
+  
+    .main_info .cards .card {
+      width: 80%; /* Ширина карточек */
+      height: auto; /* Высота адаптируется под контент */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .main_info {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  
+    .main_info h1 {
+      font-size: 24px;
+      padding-top: 80px;
+    }
+  
+    .main_info h2 {
+      font-size: 20px;
+      padding-top: 30px;
+    }
+  
+    .main_info .buttons {
+      padding-top: 40px;
+    }
+  
+    .main_info .buttons .button1,
+    .main_info .buttons .button2 {
+      padding: 10px 30px;
+      font-size: 18px;
+    }
+  
+    .main_info .cards {
+      padding-right: 20px;
+    }
+  
+    .main_info .cards .card {
+      width: 100%; /* Карточки на всю ширину */
+    }
+  }
