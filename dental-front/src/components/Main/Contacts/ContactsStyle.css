@@ -1,0 +1,247 @@
+/* Основные стили */
+.contacts-main {
+  font-family: 'Poppins', sans-serif;
+  background-color: #82D2FF;
+  padding: 20px 0;
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.contacts {
+  background-color: white;
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: auto; /* Изменено на auto для адаптивности */
+  padding: 20px; /* Добавлено для внутренних отступов */
+}
+
+.contact_heading {
+  background-color: #5AC3FE;
+  border-radius: 30px;
+  width: 45%;
+  padding: 15px 20px;
+}
+
+.contact_heading h1 {
+  color: #fff;
+  font-size: 36px;
+  margin: 0;
+}
+
+.contact_info {
+  padding: 20px;
+}
+
+.contact_info h2 {
+  color: #3C3F44;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.contact_table {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  
+}
+
+.contact_table .contact_row {
+  flex: 1;
+  max-width: 100%;
+}
+
+.contact_table hr {
+  border: 0;
+  border-left: 1px solid #3C3F44;
+  height: auto;
+  margin: 0;
+  opacity: 20%;
+}
+
+.contact_table h3 {
+  font-size: 16px;
+  color: #5AC3FE;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.contact_table p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.subtitle {
+  padding: 20px;
+  
+}
+
+.subtitle h2 {
+  font-size: 32px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.contact_cards {
+  display: flex;
+  gap: 20px; /* Расстояние между карточками */
+  padding: 20px;
+  
+}
+
+.contact_card {
+  background-color: rgba(90, 195, 254, 0.5);
+  border-radius: 20px;
+  padding: 20px;
+  flex: 1; /* Равномерное распределение пространства */
+  max-width: calc(50% - 10px); /* Две карточки в строку */
+}
+
+.contact_card h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.contact_card p {
+  font-size: 14px;
+  margin: 0 0 20px 0;
+}
+
+.contact_button a {
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+  background-color: #FBA037;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .contacts {
+    height: auto; /* Высота адаптируется под контент */
+  }
+
+  .contact_heading {
+    width: 60%; /* Увеличиваем ширину для средних экранов */
+  }
+
+  .contact_table {
+    flex-direction: column; /* На планшетах элементы в колонку */
+  }
+
+  .contact_table hr {
+    display: none; /* Скрываем разделители на планшетах */
+  }
+
+  .contact_cards {
+    flex-direction: column; /* На планшетах карточки в колонку */
+  }
+
+  .contact_card {
+    max-width: 100%; /* На планшетах карточки занимают всю ширину */
+  }
+}
+
+@media (max-width: 768px) {
+  
+  .contact_heading {
+    width: 80%; /* Увеличиваем ширину для мобильных устройств */
+    top: 20px; /* Уменьшаем смещение */
+  }
+
+  .contact_info {
+    top: 20px; /* Уменьшаем смещение */
+  }
+
+  .contact_table {
+    top: 20px; /* Уменьшаем смещение */
+  }
+
+  .subtitle {
+    top: 20px; /* Уменьшаем смещение */
+  }
+
+  .contact_cards {
+    top: 20px; /* Уменьшаем смещение */
+  }
+
+  .contact_heading h1 {
+    font-size: 24px; /* Уменьшаем размер заголовка */
+  }
+
+  .contact_info h2 {
+    font-size: 16px; /* Уменьшаем размер текста */
+  }
+
+  .contact_table h3 {
+    font-size: 14px; /* Уменьшаем размер заголовков таблицы */
+  }
+
+  .contact_table p {
+    font-size: 12px; /* Уменьшаем размер текста таблицы */
+  }
+
+  .subtitle h2 {
+    font-size: 26px; /* Уменьшаем размер подзаголовка */
+  }
+
+  .contact_card h2 {
+    font-size: 16px; /* Уменьшаем размер заголовков карточек */
+  }
+
+  .contact_card p {
+    font-size: 12px; /* Уменьшаем размер текста карточек */
+  }
+
+  .contact_button a {
+    padding: 8px 16px; /* Уменьшаем размер кнопки */
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact_heading {
+    width: 90%; /* Занимает всю ширину на маленьких экранах */
+    top: 10px; /* Уменьшаем смещение */
+  }
+
+  .contact_heading h1 {
+    font-size: 20px; /* Уменьшаем размер заголовка */
+  }
+
+  .contact_info h2 {
+    font-size: 14px; /* Уменьшаем размер текста */
+  }
+
+  .contact_table h3 {
+    font-size: 12px; /* Уменьшаем размер заголовков таблицы */
+  }
+
+  .contact_table p {
+    font-size: 10px; /* Уменьшаем размер текста таблицы */
+  }
+
+  .subtitle h2 {
+    font-size: 22px; /* Уменьшаем размер подзаголовка */
+  }
+
+  .contact_card h2 {
+    font-size: 14px; /* Уменьшаем размер заголовков карточек */
+  }
+
+  .contact_card p {
+    font-size: 10px; /* Уменьшаем размер текста карточек */
+  }
+
+  .contact_button a {
+    padding: 6px 12px; /* Уменьшаем размер кнопки */
+    font-size: 10px;
+  }
+}
