@@ -118,7 +118,7 @@ export const Catalog = () => {
         <section className="catalog">
           <div className="catalog_title">
             <div className="heading">
-              <h1>Каталог</h1>
+              <h1>Каталог услуг</h1>
             </div>
             <ul className="list">
               <li

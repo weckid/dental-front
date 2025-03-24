@@ -2,65 +2,143 @@ import React from "react";
 import "./ContactsStyle.css";
 import { Link } from "react-router-dom";
 
+const doctors = [
+    {
+      id: 1,
+      name: "Иванова Анна Сергеевна",
+      specialty: "Стоматолог-терапевт",
+      experience: "12 лет",
+      photo: "/doctor1.jpg",
+      schedule: "Пн-Пт: 9:00-18:00"
+    },
+    {
+      id: 2,
+      name: "Петров Дмитрий Владимирович",
+      specialty: "Хирург-имплантолог",
+      experience: "8 лет",
+      photo: "/doctor2.jpg",
+      schedule: "Вт-Сб: 10:00-19:00"
+    },
+    {
+      id: 3,
+      name: "Сидорова Елена Михайловна",
+      specialty: "Ортодонт",
+      experience: "15 лет",
+      photo: "/doctor3.jpg",
+      schedule: "Пн-Ср-Пт: 8:00-16:00"
+    },
+    {
+        id: 4,
+        name: "Ларионов Егор Максимович",
+        specialty: "Ортодонт",
+        experience: "20 лет",
+        photo: "/doctor4.jpg",
+        schedule: "Пн-Вт-Пт: 10:00-18:00"
+      }
+  ];
+
 export const Contacts = () => {
+    
     return (
         <main className="contacts-main">
-            <div className="container">
-                <section className="contacts">
-                    <div className="contact_heading">
-                        <h1>Общая информация о клинике:</h1>
+            <div className="contacts-container">
+                <section className="contacts-content">
+                    <div className="contact-header">
+                        <h1>Контакты клиники RX</h1>
+                        <p className="subtitle">Мы всегда рады видеть вас в нашей клинике</p>
                     </div>
-                    <div className="contact_info">
-                        <h2>
-                            Мы рады приветствовать вас на нашем сайте! RX — это современная стоматологическая клиника, где забота о вашем здоровье и комфорте стоит на первом месте.
-                        </h2>
-                    </div>
-                    <div className="contact_table">
-                        <div className="contact_row">
+
+                    <div className="contact-grid">
+                        <div className="contact-card">
+                            <div className="icon-wrapper">
+                                <img src="/clock-icon.svg" alt="Часы работы" />
+                            </div>
                             <h3>График работы</h3>
-                            <p>
-                                Пн.- Пт: 9:00 – 18:00 <br />
-                                Сб: 10:00 – 15:00 <br />
-                                Вс: выходной
-                            </p>
+                            <ul className="contact-list">
+                                <li>Пн-Пт: 9:00 – 18:00</li>
+                                <li>Сб: 10:00 – 15:00</li>
+                                <li>Вс: выходной</li>
+                            </ul>
                         </div>
-                        <hr />
-                        <div className="contact_row">
-                            <h3>Адрес</h3>
-                            <p>г. Альметьевск, ул. Ленина, д. 123</p>
-                            <h3>Почта регистратуры</h3>
-                            <p>mailto:info@rx-clinic.ru</p>
+
+                        <div className="contact-card">
+                            <div className="icon-wrapper">
+                                <img src="/location-icon.svg" alt="Адрес" />
+                            </div>
+                            <h3>Адреса клиник</h3>
+                            <ul className="contact-list">
+                                <li>г. Альметьевск, ул. Ленина, 123</li>
+                                <li>г. Казань, ул. Чистопольская, 16/15</li>
+                            </ul>
                         </div>
-                        <hr />
-                        <div className="contact_row">
-                            <h3>Где припарковать автомобиль?</h3>
-                            <p>Рядом с стоматологией расположена муниципальная платная парковка</p>
+
+                        <div className="contact-card">
+                            <div className="icon-wrapper">
+                                <img src="/email-icon.svg" alt="Почта" />
+                            </div>
+                            <h3>Контактная информация</h3>
+                            <ul className="contact-list">
+                                <li>info@rx-clinic.ru</li>
+                                <li>+7 (8553) 12-34-56</li>
+                            </ul>
+                        </div>
+
+                        <div className="contact-card">
+                            <div className="icon-wrapper">
+                                <img src="/parking-icon.svg" alt="Парковка" />
+                            </div>
+                            <h3>Парковка</h3>
+                            <p>Рядом с клиникой расположена муниципальная платная парковка</p>
                         </div>
                     </div>
-                    <div className="subtitle">
-                        <h2>Приходите к нам на прием</h2>
+
+                    <div className="clinics-section">
+                        <h2>Наши клиники</h2>
+                        <div className="clinic-cards">
+                            <div className="clinic-card">
+                                <div className="clinic-image" style={{backgroundImage: "url('/clinic1.jpg')"}}></div>
+                                <div className="clinic-info">
+                                    <h3>Клиника на Ленина</h3>
+                                    <p>г. Альметьевск, ул. Ленина, д. 123</p>
+                                    <Link to="/Entry" className="appointment-btn">Записаться</Link>
+                                </div>
+                            </div>
+
+                            <div className="clinic-card">
+                                <div className="clinic-image" style={{backgroundImage: "url('/clinic2.jpg')"}}></div>
+                                <div className="clinic-info">
+                                    <h3>Клиника на Чистопольской</h3>
+                                    <p>г. Казань, ул. Чистопольская, 16/15</p>
+                                    <Link to="/Entry" className="appointment-btn">Записаться</Link>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="contact_cards">
-                        <div className="contact_card">
-                            <h2>Клиника на Ленина</h2>
-                            <p>
-                                Адрес: <br />
-                                г. Альметьевск, ул. Ленина, д. 123
-                            </p>
-                            <div className="contact_button">
-                                <Link to="/Entry">Записаться</Link>
+                </section>
+                <section className="doctors-section">
+                    <h2>Наши специалисты</h2>
+                    <div className="doctors-grid">
+                        {doctors.map(doctor => (
+                            <div className="doctor-card" key={doctor.id}>
+                                <div className="doctor-photo">
+                                    <img src={doctor.photo} alt={doctor.name} />
+                                </div>
+                                <div className="doctor-info">
+                                    <h3>{doctor.name}</h3>
+                                    <p className="specialty">{doctor.specialty}</p>
+                                    <div className="doctor-details">
+                                        <p><strong>Стаж:</strong> {doctor.experience}</p>
+                                        <p><strong>График:</strong> {doctor.schedule}</p>
+                                    </div>
+                                    <Link 
+                                        to={`/Entry?doctor=${encodeURIComponent(doctor.name)}`} 
+                                        className="appointment-btn"
+                                    >
+                                        Записаться
+                                    </Link>
+                                </div>
                             </div>
-                        </div>
-                        <div className="contact_card">
-                            <h2>Клиника на Чистопольской</h2>
-                            <p>
-                                Адрес: <br />
-                                г. Казань, ул. Чистопольская, 16/15
-                            </p>
-                            <div className="contact_button">
-                                <Link to="/Entry">Записаться</Link>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </section>
             </div>

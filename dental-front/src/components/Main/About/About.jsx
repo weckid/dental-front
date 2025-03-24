@@ -8,7 +8,10 @@ import "./AboutStyle.css";
 
 const About = () => {
   return (
-    <main>
+    <main className="swiper-container">
+      <div className="about-content">
+
+      
       <Swiper
         className="mySwiper"
         modules={[Pagination, Navigation]} // Передаем модули
@@ -84,6 +87,7 @@ const About = () => {
           </div>
         </SwiperSlide>
       </Swiper>
+      </div>
     </main>
   );
 };

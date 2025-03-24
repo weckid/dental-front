@@ -1,247 +1,442 @@
 /* Основные стили */
 .contacts-main {
   font-family: 'Poppins', sans-serif;
-  background-color: #82D2FF;
-  padding: 20px 0;
+  background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
+  padding: 80px 0;
 }
 
-.container {
-  max-width: 1300px;
+.contacts-container {
+  max-width: 1500px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
-.contacts {
+.contacts-content {
   background-color: white;
-  border-radius: 40px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: auto; /* Изменено на auto для адаптивности */
-  padding: 20px; /* Добавлено для внутренних отступов */
+  border-radius: 24px 24px 0px 0px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 }
 
-.contact_heading {
-  background-color: #5AC3FE;
-  border-radius: 30px;
-  width: 45%;
-  padding: 15px 20px;
+/* Шапка контактов */
+.contact-header {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  color: white;
+  padding: 40px;
+  text-align: center;
 }
 
-.contact_heading h1 {
-  color: #fff;
-  font-size: 36px;
+.contact-header h1 {
+  font-size: 42px;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.contact-header .subtitle {
+  font-size: 20px;
+  opacity: 0.9;
   margin: 0;
 }
 
-.contact_info {
-  padding: 20px;
+/* Сетка контактов */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  padding: 40px;
 }
 
-.contact_info h2 {
-  color: #3C3F44;
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0;
+.contact-card {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.contact_table {
+.contact-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background-color: #e6f4ff;
+  border-radius: 50%;
   display: flex;
-  gap: 20px;
-  padding: 20px;
-  
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.contact_table .contact_row {
-  flex: 1;
-  max-width: 100%;
+.icon-wrapper img {
+  width: 30px;
+  height: 30px;
 }
 
-.contact_table hr {
-  border: 0;
-  border-left: 1px solid #3C3F44;
-  height: auto;
+.contact-card h3 {
+  font-size: 20px;
+  color: #2d3748;
+  margin: 0 0 15px 0;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
   margin: 0;
-  opacity: 20%;
 }
 
-.contact_table h3 {
+.contact-list li {
   font-size: 16px;
-  color: #5AC3FE;
-  font-weight: bold;
-  margin: 10px 0;
+  color: #4a5568;
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 25px;
 }
 
-.contact_table p {
-  font-size: 14px;
-  margin: 0;
+.contact-list li:before {
+  content: "•";
+  color: #5ac3fe;
+  font-size: 20px;
+  position: absolute;
+  left: 0;
+  top: -2px;
 }
 
-.subtitle {
-  padding: 20px;
-  
+/* Секция клиник */
+.clinics-section {
+  padding: 0 40px 40px;
 }
 
-.subtitle h2 {
+.clinics-section h2 {
   font-size: 32px;
-  font-weight: normal;
-  margin: 0;
+  color: #2d3748;
+  margin: 0 0 30px 0;
+  text-align: center;
 }
 
-.contact_cards {
-  display: flex;
-  gap: 20px; /* Расстояние между карточками */
-  padding: 20px;
-  
+.clinic-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
 }
 
-.contact_card {
-  background-color: rgba(90, 195, 254, 0.5);
-  border-radius: 20px;
-  padding: 20px;
-  flex: 1; /* Равномерное распределение пространства */
-  max-width: calc(50% - 10px); /* Две карточки в строку */
+.clinic-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
 }
 
-.contact_card h2 {
-  font-size: 18px;
-  font-weight: bold;
+.clinic-card:hover {
+  transform: translateY(-5px);
+}
+
+.clinic-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.clinic-info {
+  padding: 25px;
+}
+
+.clinic-info h3 {
+  font-size: 22px;
+  color: #2d3748;
   margin: 0 0 10px 0;
 }
 
-.contact_card p {
-  font-size: 14px;
+.clinic-info p {
+  font-size: 16px;
+  color: #4a5568;
   margin: 0 0 20px 0;
 }
 
-.contact_button a {
-  text-decoration: none;
-  color: black;
-  font-size: 14px;
-  background-color: #FBA037;
-  padding: 10px 20px;
-  border-radius: 20px;
+.appointment-btn {
   display: inline-block;
+  background-color: #fba037;
+  color: white;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.appointment-btn:hover {
+  background-color: #e89130;
+}
+
+/* Стили секции врачей */
+.doctors-section {
+  background: white;
+  padding: 60px 40px;
+  border-radius: 0 0 24px 24px;
+  margin-top: -1px; /* Плавное соединение с предыдущей секцией */
+  position: relative;
+  z-index: 2;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  font-size: 32px;
+  color: #2d3748;
+  margin-bottom: 10px;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: #5AC3FE;
+  margin: 0;
+}
+
+/* Сетка карточек с одинаковой высотой */
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+/* Карточка врача - теперь с четкими границами */
+.doctor-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden; /* Важно! Обрезает выходящие за границы элементы */
+  box-shadow: 0 5px 20px rgba(90, 195, 254, 0.15);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(90, 195, 254, 0.2); /* Четкая граница */
+}
+
+/* Контейнер для фото с фиксированной высотой */
+.doctor-photo-container {
+  position: relative;
+  width: 100%;
+  height: 280px; /* Фиксированная высота */
+  overflow: hidden; /* Обрезаем выходящие за границы части фото */
+}
+
+/* Стили для фото - теперь точно внутри контейнера */
+.doctor-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top; /* Центрируем по вертикали */
+  display: block; /* Убираем лишние отступы */
+  transition: transform 0.5s ease;
+}
+
+/* Специальность врача */
+.doctor-specialty {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(74, 85, 104, 0.85);
+  color: white;
+  padding: 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Информация о враче */
+.doctor-info {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctor-info h3 {
+  font-size: 20px;
+  color: #2d3748;
+  margin: 0 0 15px 0;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Контейнер для мета-информации */
+.doctor-meta {
+  margin: 10px 0 20px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #4a5568;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.meta-item img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.8;
+}
+
+/* Кнопка записи */
+.appointment-btn {
+  display: block;
+  text-align: center;
+  background: #5AC3FE;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: auto;
+  border: none;
+  cursor: pointer;
+}
+
+.appointment-btn:hover {
+  background: #4da7e7;
 }
 
 /* Адаптивность */
 @media (max-width: 1200px) {
-  .contacts {
-    height: auto; /* Высота адаптируется под контент */
+  .doctors-section {
+    padding: 50px 30px;
   }
-
-  .contact_heading {
-    width: 60%; /* Увеличиваем ширину для средних экранов */
+  
+  .doctor-photo-container {
+    height: 250px;
   }
+}
 
-  .contact_table {
-    flex-direction: column; /* На планшетах элементы в колонку */
+@media (max-width: 992px) {
+  .doctors-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
-
-  .contact_table hr {
-    display: none; /* Скрываем разделители на планшетах */
-  }
-
-  .contact_cards {
-    flex-direction: column; /* На планшетах карточки в колонку */
-  }
-
-  .contact_card {
-    max-width: 100%; /* На планшетах карточки занимают всю ширину */
+  
+  .doctor-photo-container {
+    height: 230px;
   }
 }
 
 @media (max-width: 768px) {
+  .doctors-section {
+    padding: 40px 20px;
+    border-radius: 0;
+  }
   
-  .contact_heading {
-    width: 80%; /* Увеличиваем ширину для мобильных устройств */
-    top: 20px; /* Уменьшаем смещение */
+  .section-header h2 {
+    font-size: 28px;
   }
-
-  .contact_info {
-    top: 20px; /* Уменьшаем смещение */
+  
+  .doctor-photo-container {
+    height: 220px;
   }
-
-  .contact_table {
-    top: 20px; /* Уменьшаем смещение */
-  }
-
-  .subtitle {
-    top: 20px; /* Уменьшаем смещение */
-  }
-
-  .contact_cards {
-    top: 20px; /* Уменьшаем смещение */
-  }
-
-  .contact_heading h1 {
-    font-size: 24px; /* Уменьшаем размер заголовка */
-  }
-
-  .contact_info h2 {
-    font-size: 16px; /* Уменьшаем размер текста */
-  }
-
-  .contact_table h3 {
-    font-size: 14px; /* Уменьшаем размер заголовков таблицы */
-  }
-
-  .contact_table p {
-    font-size: 12px; /* Уменьшаем размер текста таблицы */
-  }
-
-  .subtitle h2 {
-    font-size: 26px; /* Уменьшаем размер подзаголовка */
-  }
-
-  .contact_card h2 {
-    font-size: 16px; /* Уменьшаем размер заголовков карточек */
-  }
-
-  .contact_card p {
-    font-size: 12px; /* Уменьшаем размер текста карточек */
-  }
-
-  .contact_button a {
-    padding: 8px 16px; /* Уменьшаем размер кнопки */
-    font-size: 12px;
+  
+  .doctor-info {
+    padding: 20px;
   }
 }
 
-@media (max-width: 480px) {
-  .contact_heading {
-    width: 90%; /* Занимает всю ширину на маленьких экранах */
-    top: 10px; /* Уменьшаем смещение */
+@media (max-width: 576px) {
+  .doctors-grid {
+    grid-template-columns: 1fr;
   }
-
-  .contact_heading h1 {
-    font-size: 20px; /* Уменьшаем размер заголовка */
+  
+  .doctor-photo-container {
+    height: 200px;
   }
-
-  .contact_info h2 {
-    font-size: 14px; /* Уменьшаем размер текста */
+  
+  .doctor-info h3 {
+    font-size: 18px;
   }
-
-  .contact_table h3 {
-    font-size: 12px; /* Уменьшаем размер заголовков таблицы */
+  
+  .meta-item {
+    font-size: 13px;
   }
-
-  .contact_table p {
-    font-size: 10px; /* Уменьшаем размер текста таблицы */
+}
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .contact-header h1 {
+    font-size: 36px;
   }
+}
 
-  .subtitle h2 {
-    font-size: 22px; /* Уменьшаем размер подзаголовка */
+@media (max-width: 992px) {
+  .contact-header {
+    padding: 30px;
   }
-
-  .contact_card h2 {
-    font-size: 14px; /* Уменьшаем размер заголовков карточек */
+  
+  .contact-grid {
+    padding: 30px;
   }
-
-  .contact_card p {
-    font-size: 10px; /* Уменьшаем размер текста карточек */
+  
+  .clinics-section {
+    padding: 0 30px 30px;
   }
+  
+  .clinic-cards {
+    grid-template-columns: 1fr;
+  }
+}
 
-  .contact_button a {
-    padding: 6px 12px; /* Уменьшаем размер кнопки */
-    font-size: 10px;
+@media (max-width: 768px) {
+  .contacts-main {
+    padding: 40px 0;
+  }
+  
+  .contact-header h1 {
+    font-size: 30px;
+  }
+  
+  .contact-header .subtitle {
+    font-size: 18px;
+  }
+  
+  .contact-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .contact-card {
+    padding: 25px;
+  }
+  
+  .clinics-section h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 576px) {
+  .contact-header {
+    padding: 25px 20px;
+  }
+  
+  .contact-header h1 {
+    font-size: 26px;
+  }
+  
+  .clinics-section {
+    padding: 0 20px 20px;
+  }
+  
+  .clinic-info {
+    padding: 20px;
+  }
+  
+  .appointment-btn {
+    padding: 10px 20px;
   }
 }
