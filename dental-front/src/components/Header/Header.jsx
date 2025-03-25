@@ -34,7 +34,7 @@ export const Header = observer(() => {
           </ul>
         </div>
         <div className="desktop-login">
-  <Link to="/Profile">Вход</Link>
+  <Link to="/Login">Вход</Link>
 </div>
         
         <button className={`burger-menu ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>

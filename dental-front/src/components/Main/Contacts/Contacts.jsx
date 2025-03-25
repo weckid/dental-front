@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./ContactsStyle.css";
 import { Link } from "react-router-dom";
-
+import apiClient from "../../apiClient/apiClient";
 const doctors = [
     {
       id: 1,
-      name: "Иванова Анна Сергеевна",
+      name: "Левин Борис Аркадьевич",
       specialty: "Стоматолог-терапевт",
       experience: "12 лет",
       photo: "/doctor1.jpg",
@@ -13,15 +13,15 @@ const doctors = [
     },
     {
       id: 2,
-      name: "Петров Дмитрий Владимирович",
-      specialty: "Хирург-имплантолог",
-      experience: "8 лет",
+      name: "Быков Андрей Евгеньевич",
+      specialty: "Хирург-стоматолог",
+      experience: "20 лет",
       photo: "/doctor2.jpg",
       schedule: "Вт-Сб: 10:00-19:00"
     },
     {
       id: 3,
-      name: "Сидорова Елена Михайловна",
+      name: "Лобанов Семен Семенович",
       specialty: "Ортодонт",
       experience: "15 лет",
       photo: "/doctor3.jpg",
@@ -29,16 +29,25 @@ const doctors = [
     },
     {
         id: 4,
-        name: "Ларионов Егор Максимович",
-        specialty: "Ортодонт",
-        experience: "20 лет",
+        name: "Скрябина Любовь Михайловна",
+        specialty: "Старшая медсестра",
+        experience: "10 лет",
         photo: "/doctor4.jpg",
         schedule: "Пн-Вт-Пт: 10:00-18:00"
       }
   ];
+  
 
 export const Contacts = () => {
-    
+    useEffect(() => {
+        apiClient.get('/doctors') // Замените на ваш эндпоинт
+            .then((response) => {
+                setDoctors(response.data);
+            })
+            .catch((error) => {
+                console.error('Ошибка при получении данных:', error);
+            });
+    }, []);
     return (
         <main className="contacts-main">
             <div className="contacts-container">
@@ -116,7 +125,10 @@ export const Contacts = () => {
                     </div>
                 </section>
                 <section className="doctors-section">
+                <div className="section-header">
                     <h2>Наши специалисты</h2>
+                </div>
+                    
                     <div className="doctors-grid">
                         {doctors.map(doctor => (
                             <div className="doctor-card" key={doctor.id}>

@@ -2,7 +2,7 @@
 .contacts-main {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
-  padding: 80px 0;
+  padding: 70px 0;
 }
 
 .contacts-container {
@@ -177,7 +177,7 @@
   background: white;
   padding: 60px 40px;
   border-radius: 0 0 24px 24px;
-  margin-top: -1px; /* Плавное соединение с предыдущей секцией */
+  margin-top: -1px;
   position: relative;
   z-index: 2;
 }
@@ -191,6 +191,7 @@
   font-size: 32px;
   color: #2d3748;
   margin-bottom: 10px;
+  /* text-align: center; */
 }
 
 .section-subtitle {
@@ -199,7 +200,7 @@
   margin: 0;
 }
 
-/* Сетка карточек с одинаковой высотой */
+/* Обновленные стили для карточек врачей */
 .doctors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -207,52 +208,38 @@
   margin-top: 30px;
 }
 
-/* Карточка врача - теперь с четкими границами */
 .doctor-card {
   display: flex;
   flex-direction: column;
   height: 100%;
   background: #fff;
   border-radius: 16px;
-  overflow: hidden; /* Важно! Обрезает выходящие за границы элементы */
+  overflow: hidden;
   box-shadow: 0 5px 20px rgba(90, 195, 254, 0.15);
   transition: all 0.3s ease;
-  border: 1px solid rgba(90, 195, 254, 0.2); /* Четкая граница */
+  border: 1px solid rgba(90, 195, 254, 0.2);
 }
 
-/* Контейнер для фото с фиксированной высотой */
-.doctor-photo-container {
-  position: relative;
-  width: 100%;
-  height: 280px; /* Фиксированная высота */
-  overflow: hidden; /* Обрезаем выходящие за границы части фото */
-}
-
-/* Стили для фото - теперь точно внутри контейнера */
+/* Контейнер для фото с фиксированными размерами */
 .doctor-photo {
   width: 100%;
+  height: 280px; /* Фиксированная высота */
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5; /* Фон на случай, если фото не загрузится */
+}
+
+.doctor-photo img {
+  width: auto;
   height: 100%;
   object-fit: cover;
-  object-position: center top; /* Центрируем по вертикали */
-  display: block; /* Убираем лишние отступы */
-  transition: transform 0.5s ease;
+  display: block;
 }
 
-/* Специальность врача */
-.doctor-specialty {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(74, 85, 104, 0.85);
-  color: white;
-  padding: 12px;
-  text-align: center;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-/* Информация о враче */
+/* Остальные стили остаются без изменений */
 .doctor-info {
   padding: 25px;
   flex-grow: 1;
@@ -268,12 +255,11 @@
   line-height: 1.3;
 }
 
-/* Контейнер для мета-информации */
-.doctor-meta {
+.doctor-details {
   margin: 10px 0 20px;
 }
 
-.meta-item {
+.doctor-details p {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -283,13 +269,6 @@
   line-height: 1.4;
 }
 
-.meta-item img {
-  width: 18px;
-  height: 18px;
-  opacity: 0.8;
-}
-
-/* Кнопка записи */
 .appointment-btn {
   display: block;
   text-align: center;
@@ -309,43 +288,16 @@
   background: #4da7e7;
 }
 
-/* Адаптивность */
-@media (max-width: 1200px) {
-  .doctors-section {
-    padding: 50px 30px;
-  }
-  
-  .doctor-photo-container {
+/* Адаптивные стили */
+@media (max-width: 992px) {
+  .doctor-photo {
     height: 250px;
   }
 }
 
-@media (max-width: 992px) {
-  .doctors-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-  
-  .doctor-photo-container {
-    height: 230px;
-  }
-}
-
 @media (max-width: 768px) {
-  .doctors-section {
-    padding: 40px 20px;
-    border-radius: 0;
-  }
-  
-  .section-header h2 {
-    font-size: 28px;
-  }
-  
-  .doctor-photo-container {
+  .doctor-photo {
     height: 220px;
-  }
-  
-  .doctor-info {
-    padding: 20px;
   }
 }
 
@@ -354,16 +306,8 @@
     grid-template-columns: 1fr;
   }
   
-  .doctor-photo-container {
-    height: 200px;
-  }
-  
-  .doctor-info h3 {
-    font-size: 18px;
-  }
-  
-  .meta-item {
-    font-size: 13px;
+  .doctor-photo {
+    height: 280px;
   }
 }
 /* Адаптивность */
