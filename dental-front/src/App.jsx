@@ -7,9 +7,22 @@ import { Contacts } from "./components/Main/Contacts/Contacts"
 import { Entry } from "./components/Main/Entry/Entry"
 import { Catalog } from "./components/Main/Catalog/Catalog"
 import { Login } from "./components/Main/Login/Login"
+import axios from "axios";
 
 function App() {
+// Настройка базового URL
+axios.defaults.baseURL = 'http://localhost:8080';
 
+// Добавление интерцептора для JWT
+axios.interceptors.request.use((config) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user?.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
    return (
     <>
       <Header/>

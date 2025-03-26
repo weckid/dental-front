@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import "./LoginStyle.css"; 
+import "./LoginStyle.css";
+import authService from "../../../api/authService";
 
 export const Login = () => {
-  const [isLoginMode, setIsLoginMode] = useState(true); // Режим: вход или регистрация
+  const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
-
-  const [errors, setErrors] = useState({}); // Состояние для хранения ошибок валидации
-  const [successMessage, setSuccessMessage] = useState(""); // Сообщение об успешной операции
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Добавляем состояние для ошибок API
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,30 +40,39 @@ export const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(""); // Сбрасываем сообщение об ошибке
+    
     if (validateForm()) {
-      if (isLoginMode) {
-        
-        console.log("Вход выполнен:", formData);
-        setSuccessMessage("Вы успешно вошли в аккаунт!");
-      } else {
-        
-        console.log("Регистрация выполнена:", formData);
-        setSuccessMessage("Регистрация прошла успешно!");
+      try {
+        if (isLoginMode) {
+          // Логин
+          await authService.login(formData.email, formData.password);
+          setSuccessMessage("Вы успешно вошли в аккаунт!");
+        } else {
+          // Регистрация
+          await authService.register(formData.name, formData.email, formData.password);
+          setSuccessMessage("Регистрация прошла успешно! Теперь вы можете войти.");
+          setIsLoginMode(true); // Переключаем на режим входа после успешной регистрации
+        }
+        setFormData({ name: "", email: "", password: "" });
+      } catch (error) {
+        console.error("Ошибка:", error);
+        setErrorMessage(
+          error.response?.data?.message || 
+          "Произошла ошибка. Пожалуйста, попробуйте снова."
+        );
       }
-      setFormData({ name: "", email: "", password: "" }); // Очищаем форму
-    } else {
-      setSuccessMessage("");
     }
   };
-
   return (
     <main>
       <div className="container">
         <section className="auth">
           <h1>{isLoginMode ? "Вход" : "Регистрация"}</h1>
           {successMessage && <p className="success-message">{successMessage}</p>}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
           <form onSubmit={handleSubmit}>
             {!isLoginMode && (
               <div className="form-group">

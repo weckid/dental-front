@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./ContactsStyle.css";
 import { Link } from "react-router-dom";
-import apiClient from "../../apiClient/apiClient";
-const doctors = [
+import apiClient from "../../../api/apiClient";
+
+const localDoctors = [
     {
       id: 1,
       name: "Левин Борис Аркадьевич",
@@ -38,16 +39,30 @@ const doctors = [
   ];
   
 
-export const Contacts = () => {
+  export const Contacts = () => {
+    const [doctorsList, setDoctorsList] = useState([]);
+    
+    const [error, setError] = useState(null);
+  
     useEffect(() => {
-        apiClient.get('/doctors') // Замените на ваш эндпоинт
-            .then((response) => {
-                setDoctors(response.data);
-            })
-            .catch((error) => {
-                console.error('Ошибка при получении данных:', error);
-            });
+      const fetchDoctors = async () => {
+        try {
+          // Пробуем получить данные с бэкенда
+          const response = await apiClient.get('/doctors');
+          setDoctorsList(response.data);
+        } catch (err) {
+          console.error('Ошибка при получении данных:', err);
+          setError(err);
+          // Используем локальные данные при ошибке
+          setDoctorsList(localDoctors);
+        } 
+      };
+  
+      fetchDoctors();
     }, []);
+    if (error) {
+      console.log('Используем локальные данные из-за ошибки подключения');
+    }
     return (
         <main className="contacts-main">
             <div className="contacts-container">
@@ -130,7 +145,7 @@ export const Contacts = () => {
                 </div>
                     
                     <div className="doctors-grid">
-                        {doctors.map(doctor => (
+                        {doctorsList.map(doctor => (
                             <div className="doctor-card" key={doctor.id}>
                                 <div className="doctor-photo">
                                     <img src={doctor.photo} alt={doctor.name} />

@@ -81,3 +81,20 @@ main {
   .mode-switch:hover {
     color: #3a9dfc;
   }
+  .error-message {
+    color: #ff4444;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .success-message {
+    color: #00C851;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .error {
+    color: #ff4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
