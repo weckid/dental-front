@@ -5,13 +5,13 @@ import authService from "../../../api/authService";
 export const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    username: "", // Изменили name на username
+    email: "",    // Оставляем email только для регистрации
     password: "",
   });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Добавляем состояние для ошибок API
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,12 +23,12 @@ export const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!isLoginMode && !formData.name.trim()) {
-      newErrors.name = "Имя обязательно.";
+    if (!isLoginMode && !formData.username.trim()) {
+      newErrors.username = "Имя пользователя обязательно.";
     }
-    if (!formData.email.trim()) {
+    if (!isLoginMode && !formData.email.trim()) {
       newErrors.email = "Email обязателен.";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!isLoginMode && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Неверный формат email.";
     }
     if (!formData.password.trim()) {
@@ -42,30 +42,26 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(""); // Сбрасываем сообщение об ошибке
     
-    if (validateForm()) {
-      try {
-        if (isLoginMode) {
-          // Логин
-          await authService.login(formData.email, formData.password);
-          setSuccessMessage("Вы успешно вошли в аккаунт!");
-        } else {
-          // Регистрация
-          await authService.register(formData.name, formData.email, formData.password);
-          setSuccessMessage("Регистрация прошла успешно! Теперь вы можете войти.");
-          setIsLoginMode(true); // Переключаем на режим входа после успешной регистрации
-        }
-        setFormData({ name: "", email: "", password: "" });
-      } catch (error) {
-        console.error("Ошибка:", error);
-        setErrorMessage(
-          error.response?.data?.message || 
-          "Произошла ошибка. Пожалуйста, попробуйте снова."
-        );
-      }
+    if (!validateForm()) return;
+  
+    try {
+      // Для входа используем только email и password
+      const userData = await authService.login(
+        formData.email, 
+        formData.password
+      );
+      
+      authStore.login(userData); // Синхронизируем хранилища
+      setSuccessMessage("Успешный вход!");
+      
+    } catch (error) {
+      console.error("Auth error:", error.response?.data || error.message);
+      setErrorMessage(error.response?.data?.message || "Ошибка авторизации");
     }
   };
+  
+
   return (
     <main>
       <div className="container">
@@ -74,32 +70,36 @@ export const Login = () => {
           {successMessage && <p className="success-message">{successMessage}</p>}
           {errorMessage && <p className="error-message">{errorMessage}</p>}
           <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="username">
+                {isLoginMode ? "Еmail" : "Имя пользователя "}:
+              </label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder={isLoginMode ? "Введите email" : "Введите имя пользователя"}
+              />
+              {errors.username && <p className="error">{errors.username}</p>}
+            </div>
+            
             {!isLoginMode && (
               <div className="form-group">
-                <label htmlFor="name">Имя:</label>
+                <label htmlFor="email">Email:</label>
                 <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  placeholder="Введите ваше имя"
+                  placeholder="Введите ваш email"
                 />
-                {errors.name && <p className="error">{errors.name}</p>}
+                {errors.email && <p className="error">{errors.email}</p>}
               </div>
             )}
-            <div className="form-group">
-              <label htmlFor="email">Email:</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Введите ваш email"
-              />
-              {errors.email && <p className="error">{errors.email}</p>}
-            </div>
+            
             <div className="form-group">
               <label htmlFor="password">Пароль:</label>
               <input
@@ -112,10 +112,12 @@ export const Login = () => {
               />
               {errors.password && <p className="error">{errors.password}</p>}
             </div>
+            
             <button type="submit" className="auth-button">
               {isLoginMode ? "Войти" : "Зарегистрироваться"}
             </button>
           </form>
+          
           <p className="switch-mode">
             {isLoginMode ? "Нет аккаунта?" : "Уже есть аккаунт?"}{" "}
             <button
