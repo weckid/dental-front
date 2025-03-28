@@ -1,0 +1,186 @@
+main {
+    font-family: 'Poppins', sans-serif;
+    padding: 20px 0;
+}
+
+.catalog {
+    background-color: white;
+    border-radius: 40px;
+    padding-bottom: 80px;
+    padding: 40px;
+  }
+  
+  .catalog h1 {
+    font-size: 36px;
+    font-weight: bold;
+    padding: 15px 40px;
+    border-radius: 30px;
+    margin: 0;
+    display: inline-block;
+  }
+  
+  .list {
+    display: flex;
+    gap: 30px;
+    padding: 0;
+  }
+  
+  .list li {
+    list-style: none;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 0;
+  }
+  
+  .list li:hover {
+    color: #5ac3fe;
+    transition: 0.1s ease-in-out;
+  }
+  
+  .list li.active {
+    color: #5ac3fe;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .catalog_card {
+    text-align: center;
+    width: 31%;
+    background-color: #82d2ff;
+    border-radius: 30px;
+    border: 2px solid black;
+    margin-top: 33px;
+  }
+  
+  .catalog_card h2 {
+    font-size: 26px;
+    font-weight: normal;
+  }
+  
+  .catalog_card p {
+    font-size: 16px;
+  }
+  
+  .catalog_card h3 {
+    font-size: 26px;
+  }
+  
+  .catalog_card img {
+    border: 1px solid black;
+    border-radius: 40px;
+    margin-top: 20px;
+    width: 312px;
+    height: 100%;
+  }
+  
+  .button_card {
+    background-color: #FE9A5A;
+    border-radius: 40px;
+    width: 60%;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 30px;
+    border: 1px solid #000;
+    margin-left: 20%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .button_card a {
+    text-decoration: none;
+    font-size: 14px;
+    color: black;
+  }
+  
+  .button_card:hover {
+    background-color: #eb7d7d;
+    transition: all 0.6s;
+  }
+  
+  .button_card:hover a {
+    color: #171717;
+  }
+  
+  .catalog_card:hover {
+    transform: scale(1.1);
+    transition: all 0.6s;
+  }
+  
+  .content_cards {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  @media (max-width: 1200px) {
+    .catalog_card {
+        width: calc(48% - 20px); /* 2 карточки в ряд */
+    }
+}
+
+/* Адаптив для 768px */
+@media (max-width: 768px) {
+    .catalog h1 {
+        font-size: 1.75rem; /* 28px */
+        padding: 10px 20px;
+    }
+
+    .list {
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .list li {
+        font-size: 1rem; /* 16px */
+        padding: 8px 12px;
+    }
+
+    .catalog_card {
+        width: 100%; /* 1 карточка в ряд */
+        margin-top: 20px;
+    }
+
+    .button_card {
+        width: 80%; /* Увеличиваем кнопку для мобильных */
+    }
+}
+
+/* Адаптив для 480px */
+@media (max-width: 480px) {
+    .catalog {
+        padding: 20px;
+    }
+
+    .catalog h1 {
+        font-size: 1.5rem; /* 24px */
+        padding: 8px 16px;
+    }
+
+    .list {
+        gap: 10px;
+    }
+
+    .list li {
+        font-size: 0.875rem; /* 14px */
+        padding: 6px 10px;
+    }
+
+    .catalog_card h2 {
+        font-size: 1.375rem; /* 22px */
+    }
+
+    .catalog_card p {
+        font-size: 0.875rem; /* 14px */
+    }
+
+    .catalog_card h3 {
+        font-size: 1.375rem; /* 22px */
+    }
+
+    .button_card {
+        width: 90%; /* Еще больше кнопка для маленьких экранов */
+    }
+}
