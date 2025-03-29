@@ -1,15 +1,13 @@
 /* Header Wrapper */
 .header-wrapper {
-  max-width: 1400px;
   width: 100%;
-  margin: 0 auto;
   padding: 10px 20px;
+  box-sizing: border-box;
 }
 
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: #fff;
   border-radius: 60px;
   height: 85px;
@@ -18,6 +16,9 @@
   font-family: 'Poppins', sans-serif;
   position: relative;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+  justify-content: space-between;
 }
 
 /* Logo */
@@ -25,13 +26,14 @@
   width: 60px;
   height: 60px;
   z-index: 11;
+  flex-shrink: 0;
 }
 
 /* Desktop Login */
 .desktop-login {
-  margin-left: auto;
-  margin-right: 30px;
+  flex-shrink: 0;
   z-index: 11;
+  margin-left: 20px;
 }
 
 .desktop-login a {
@@ -52,6 +54,7 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  margin: 0 20px;
 }
 
 .nav ul {
@@ -118,6 +121,7 @@
   cursor: pointer;
   padding: 0;
   z-index: 12;
+  flex-shrink: 0;
 }
 
 .burger-menu span {
@@ -128,10 +132,25 @@
   transition: all 0.3s ease;
 }
 
-/* Mobile Menu */
-@media (max-width: 992px) {
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
   .header {
     padding: 0 30px;
+  }
+  
+  .nav ul {
+    gap: 40px;
+  }
+  
+  .nav ul a,
+  .desktop-login a {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .header {
+    padding: 0 25px;
   }
   
   .burger-menu {
@@ -161,6 +180,7 @@
     transition: all 0.5s ease;
     z-index: 10;
     pointer-events: none;
+    margin: 0;
   }
   
   .nav.active {
@@ -192,22 +212,6 @@
   }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 1200px) {
-  .header-wrapper {
-    padding: 10px 20px;
-  }
-  
-  .nav ul {
-    gap: 40px;
-  }
-  
-  .nav ul a,
-  .desktop-login a {
-    font-size: 20px;
-  }
-}
-
 @media (max-width: 768px) {
   .header {
     height: 70px;
@@ -217,5 +221,29 @@
   .header .logo {
     width: 50px;
     height: 50px;
+  }
+  
+  .burger-menu {
+    margin-left: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    padding: 0 15px;
+  }
+  
+  .header .logo {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .burger-menu {
+    width: 25px;
+    height: 20px;
+  }
+  
+  .nav ul a {
+    font-size: 20px;
   }
 }

@@ -40,7 +40,7 @@ export const Header = observer(() => {
             <li><Link to="/Catalog">Каталог услуг</Link></li>
             {authStore.isAuth ? (
               <li className="mobile-login">
-                <button onClick={handleLogout}>Выход</button>
+                <Link onClick={handleLogout}>Выход</Link>
               </li>
             ) : (
               <li className="mobile-login">

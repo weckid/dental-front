@@ -1,186 +1,234 @@
+/* Основные стили */
 main {
-    font-family: 'Poppins', sans-serif;
-    padding: 20px 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
+  padding: 70px 0;
+  min-height: 100vh;
 }
 
+.container {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Шапка каталога - теперь на всю ширину контейнера */
+.catalog_title {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.heading {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  color: white;
+  padding: 40px 0;
+  margin: 0 -40px;
+  text-align: center;
+  border-radius: 24px 24px 0 0; 
+}
+
+.heading h1 {
+  font-size: 42px;
+  margin: 0;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Фильтры */
+.list {
+  display: flex;
+  gap: 20px;
+  padding: 50px 0;
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.list li {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4a5568;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.list li:hover {
+  color: #5ac3fe;
+  background: #e6f4ff;
+}
+
+.list li.active {
+  background-color: #5ac3fe;
+  color: white;
+}
+
+/* Карточки услуг с центрированными изображениями */
 .catalog {
-    background-color: white;
-    border-radius: 40px;
-    padding-bottom: 80px;
-    padding: 40px;
-  }
-  
-  .catalog h1 {
+  background-color: white;
+  border-radius: 24px;
+  padding: 0 40px 40px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05);
+  /* margin-top: -20px;  */
+}
+
+.content_cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+  /* padding-top: 20px; */
+}
+
+.catalog_card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(90, 195, 254, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.image_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  background: #f8fafc;
+  padding: 20px;
+}
+
+.catalog_card img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.text_card_catalog {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.text_card_catalog h2 {
+  font-size: 20px;
+  color: #2d3748;
+  margin: 0 0 15px 0;
+}
+
+.text_card_catalog p {
+  font-size: 16px;
+  color: #4a5568;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.text_card_catalog h3 {
+  font-size: 22px;
+  color: #2d3748;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+}
+
+.button_card {
+  background: #5ac3fe;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  margin-top: auto;
+}
+
+.button_card:hover {
+  background: #4da7e7;
+}
+
+.button_card a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  display: block;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .heading h1 {
     font-size: 36px;
-    font-weight: bold;
-    padding: 15px 40px;
-    border-radius: 30px;
-    margin: 0;
-    display: inline-block;
-  }
-  
-  .list {
-    display: flex;
-    gap: 30px;
-    padding: 0;
-  }
-  
-  .list li {
-    list-style: none;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    margin: 0;
-  }
-  
-  .list li:hover {
-    color: #5ac3fe;
-    transition: 0.1s ease-in-out;
-  }
-  
-  .list li.active {
-    color: #5ac3fe;
-    transition: 0.3s ease-in-out;
-  }
-  
-  .catalog_card {
-    text-align: center;
-    width: 31%;
-    background-color: #82d2ff;
-    border-radius: 30px;
-    border: 2px solid black;
-    margin-top: 33px;
-  }
-  
-  .catalog_card h2 {
-    font-size: 26px;
-    font-weight: normal;
-  }
-  
-  .catalog_card p {
-    font-size: 16px;
-  }
-  
-  .catalog_card h3 {
-    font-size: 26px;
-  }
-  
-  .catalog_card img {
-    border: 1px solid black;
-    border-radius: 40px;
-    margin-top: 20px;
-    width: 312px;
-    height: 100%;
-  }
-  
-  .button_card {
-    background-color: #FE9A5A;
-    border-radius: 40px;
-    width: 60%;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-bottom: 30px;
-    border: 1px solid #000;
-    margin-left: 20%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  }
-  
-  .button_card a {
-    text-decoration: none;
-    font-size: 14px;
-    color: black;
-  }
-  
-  .button_card:hover {
-    background-color: #eb7d7d;
-    transition: all 0.6s;
-  }
-  
-  .button_card:hover a {
-    color: #171717;
-  }
-  
-  .catalog_card:hover {
-    transform: scale(1.1);
-    transition: all 0.6s;
   }
   
   .content_cards {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
-  @media (max-width: 1200px) {
-    .catalog_card {
-        width: calc(48% - 20px); /* 2 карточки в ряд */
-    }
 }
 
-/* Адаптив для 768px */
+@media (max-width: 992px) {
+  .catalog {
+    padding: 0 30px 30px;
+  }
+  
+  .heading h1 {
+    font-size: 32px;
+  }
+}
+
 @media (max-width: 768px) {
-    .catalog h1 {
-        font-size: 1.75rem; /* 28px */
-        padding: 10px 20px;
-    }
-
-    .list {
-        gap: 15px;
-        flex-wrap: wrap;
-    }
-
-    .list li {
-        font-size: 1rem; /* 16px */
-        padding: 8px 12px;
-    }
-
-    .catalog_card {
-        width: 100%; /* 1 карточка в ряд */
-        margin-top: 20px;
-    }
-
-    .button_card {
-        width: 80%; /* Увеличиваем кнопку для мобильных */
-    }
+  main {
+    padding: 40px 0;
+  }
+  
+  .heading h1 {
+    font-size: 28px;
+  }
+  .heading {
+    margin: 0 -30px;
+  }
+  
+  .list {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .content_cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .image_container {
+    height: 200px;
+  }
 }
 
-/* Адаптив для 480px */
-@media (max-width: 480px) {
-    .catalog {
-        padding: 20px;
-    }
-
-    .catalog h1 {
-        font-size: 1.5rem; /* 24px */
-        padding: 8px 16px;
-    }
-
-    .list {
-        gap: 10px;
-    }
-
-    .list li {
-        font-size: 0.875rem; /* 14px */
-        padding: 6px 10px;
-    }
-
-    .catalog_card h2 {
-        font-size: 1.375rem; /* 22px */
-    }
-
-    .catalog_card p {
-        font-size: 0.875rem; /* 14px */
-    }
-
-    .catalog_card h3 {
-        font-size: 1.375rem; /* 22px */
-    }
-
-    .button_card {
-        width: 90%; /* Еще больше кнопка для маленьких экранов */
-    }
+@media (max-width: 576px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .catalog {
+    padding: 0 20px 20px;
+    /* border-radius: 0; */
+    margin-top: 0;
+  }
+  
+  .heading {
+    margin: 0 -20px;
+    padding: 15px 0;
+  }
+  
+  .heading h1 {
+    font-size: 24px;
+  }
+  
+  .image_container {
+    height: 180px;
+    padding: 15px;
+  }
+  
+  .text_card_catalog {
+    padding: 20px;
+  }
 }
