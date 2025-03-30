@@ -3,7 +3,7 @@ import "./LoginStyle.css";
 import { rootStore } from "../../../stores/rootStore";
 import authService from "../../../api/authService";
 import { useNavigate } from "react-router-dom";
-import { observer } from "mobx-react-lite";
+// import { observer } from "mobx-react-lite";
 
 
 export const Login = () => {

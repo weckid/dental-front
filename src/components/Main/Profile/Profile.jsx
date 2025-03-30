@@ -1,281 +1,119 @@
-import React from "react";
-import "./ProfileStyle.css";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import './ProfileStyle.css';
 
 const Profile = () => {
-    // Состояние для данных пользователя
     const [userData, setUserData] = useState({
-      username: 'user123',
-      firstName: 'Иван',
-      lastName: 'Иванов',
-      email: 'user@example.com',
-      phone: '+79123456789',
-      avatar: 'https://via.placeholder.com/150',
+        login: '',
+        email: ''
     });
-  
-    // Состояние для формы изменения пароля
-    const [passwordForm, setPasswordForm] = useState({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: '',
-    });
-  
-    // Состояние для редактирования
-    const [isEditing, setIsEditing] = useState(false);
-    const [isChangingPassword, setIsChangingPassword] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
-  
-    // Обработчик изменения данных
-    const handleInputChange = (e) => {
-      const { name, value } = e.target;
-      setUserData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    };
-  
-    // Обработчик изменения пароля
-    const handlePasswordChange = (e) => {
-      const { name, value } = e.target;
-      setPasswordForm(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    };
-  
-    // Обработчик загрузки фото
-    const handlePhotoUpload = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setUserData(prev => ({
-            ...prev,
-            avatar: reader.result
-          }));
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+
+        const fetchUserData = async () => {
+            try {
+                setLoading(true);
+                setError(null);
+                
+                const response = await axios.get('/api/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                setUserData({
+                    login: response.data.username,
+                    email: response.data.email
+                });
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setError('Не удалось загрузить данные профиля');
+                if (error.response?.status === 401) {
+                    localStorage.removeItem('token');
+                    navigate('/login');
+                }
+            } finally {
+                setLoading(false);
+            }
         };
-        reader.readAsDataURL(file);
-      }
+
+        fetchUserData();
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
     };
-  
-    // Обработчик сохранения данных
-    const handleSave = async () => {
-      try {
-        // Здесь должен быть API-запрос для сохранения данных
-        // await axios.put('/api/profile', userData);
-        setIsEditing(false);
-        setSuccess('Данные успешно обновлены');
-        setTimeout(() => setSuccess(''), 3000);
-      } catch (err) {
-        setError('Ошибка при обновлении данных');
-        setTimeout(() => setError(''), 3000);
-      }
-    };
-  
-    // Обработчик смены пароля
-    const handlePasswordSave = async () => {
-      if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-        setError('Новые пароли не совпадают');
-        setTimeout(() => setError(''), 3000);
-        return;
-      }
-  
-      try {
-        // Здесь должен быть API-запрос для смены пароля
-        // await axios.put('/api/change-password', {
-        //   currentPassword: passwordForm.currentPassword,
-        //   newPassword: passwordForm.newPassword
-        // });
-        
-        setPasswordForm({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: '',
-        });
-        setIsChangingPassword(false);
-        setSuccess('Пароль успешно изменен');
-        setTimeout(() => setSuccess(''), 3000);
-      } catch (err) {
-        setError('Ошибка при изменении пароля. Проверьте текущий пароль.');
-        setTimeout(() => setError(''), 3000);
-      }
-    };
-  
+
+    if (loading) {
+        return (
+            <div className="entry-page">
+                <div className="entry-container">
+                    <div className="loading-spinner">Загрузка...</div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="entry-page">
+                <div className="entry-container">
+                    <div className="error-message">{error}</div>
+                    <button 
+                        className="submit-btn"
+                        onClick={() => window.location.reload()}
+                    >
+                        Попробовать снова
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     return (
-      <div style={ProfileStyle.container}>
-        <div style={ProfileStyle.header}>
-          <label htmlFor="avatar-upload">
-            <img 
-              src={userData.avatar} 
-              alt="Profile" 
-              style={ProfileStyle.photo}
-            />
-          </label>
-          <input
-            id="avatar-upload"
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoUpload}
-            style={ProfileStyle.photoUpload}
-          />
-          <div style={ProfileStyle.info}>
-            <h1 style={ProfileStyle.name}>
-              {isEditing ? (
-                <>
-                  <input
-                    type="text"
-                    name="firstName"
-                    value={userData.firstName}
-                    onChange={handleInputChange}
-                    style={{...ProfileStyle.input, width: 'auto', marginRight: '5px'}}
-                  />
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={userData.lastName}
-                    onChange={handleInputChange}
-                    style={{...ProfileStyle.input, width: 'auto'}}
-                  />
-                </>
-              ) : (
-                `${userData.firstName} ${userData.lastName}`
-              )}
-            </h1>
-            <p style={ProfileStyle.email}>
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={userData.email}
-                  onChange={handleInputChange}
-                  style={ProfileStyle.input}
-                />
-              ) : (
-                userData.email
-              )}
-            </p>
-          </div>
-        </div>
-  
-        <div style={ProfileStyle.section}>
-          <h2 style={ProfileStyle.sectionTitle}>Основная информация</h2>
-          <div style={ProfileStyle.formGroup}>
-            <label style={ProfileStyle.label}>Логин</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="username"
-                value={userData.username}
-                onChange={handleInputChange}
-                style={ProfileStyle.input}
-              />
-            ) : (
-              <p>{userData.username}</p>
-            )}
-          </div>
-          <div style={ProfileStyle.formGroup}>
-            <label style={ProfileStyle.label}>Телефон</label>
-            {isEditing ? (
-              <input
-                type="tel"
-                name="phone"
-                value={userData.phone}
-                onChange={handleInputChange}
-                style={ProfileStyle.input}
-              />
-            ) : (
-              <p>{userData.phone}</p>
-            )}
-          </div>
-        </div>
-  
-        {!isChangingPassword ? (
-          <div style={ProfileStyle.section}>
-            <button 
-              style={ProfileStyle.button} 
-              onClick={() => setIsChangingPassword(true)}
-            >
-              Изменить пароль
-            </button>
-          </div>
-        ) : (
-          <div style={ProfileStyle.section}>
-            <h2 style={ProfileStyle.sectionTitle}>Изменение пароля</h2>
-            <div style={ProfileStyle.formGroup}>
-              <label style={ProfileStyle.label}>Текущий пароль</label>
-              <input
-                type="password"
-                name="currentPassword"
-                value={passwordForm.currentPassword}
-                onChange={handlePasswordChange}
-                style={ProfileStyle.input}
-              />
+        <div className="entry-page">
+            <div className="entry-container">
+                <div className="entry-hero">
+                    <h1 className="entry-title">Профиль пользователя</h1>
+                    <p className="entry-subtitle">Здесь вы можете просмотреть свои данные</p>
+                </div>
+
+                <div className="profile-content">
+                    <div className="section-title">Личная информация</div>
+                    
+                    <div className="profile-info">
+                        <div className="profile-field">
+                            <span className="profile-label">Логин:</span>
+                            <span className="profile-value">{userData.login}</span>
+                        </div>
+                        <div className="profile-field">
+                            <span className="profile-label">Email:</span>
+                            <span className="profile-value">{userData.email}</span>
+                        </div>
+                    </div>
+
+                    <div className="profile-actions">
+                        <button 
+                            className="submit-btn"
+                            onClick={handleLogout}
+                        >
+                            Выйти из аккаунта
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div style={ProfileStyle.formGroup}>
-              <label style={ProfileStyle.label}>Новый пароль</label>
-              <input
-                type="password"
-                name="newPassword"
-                value={passwordForm.newPassword}
-                onChange={handlePasswordChange}
-                style={ProfileStyle.input}
-              />
-            </div>
-            <div style={ProfileStyle.formGroup}>
-              <label style={ProfileStyle.label}>Подтвердите новый пароль</label>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={passwordForm.confirmPassword}
-                onChange={handlePasswordChange}
-                style={ProfileStyle.input}
-              />
-            </div>
-            <button 
-              style={ProfileStyle.button} 
-              onClick={handlePasswordSave}
-            >
-              Сохранить пароль
-            </button>
-            <button 
-              style={ProfileStyle.buttonSecondary} 
-              onClick={() => setIsChangingPassword(false)}
-            >
-              Отмена
-            </button>
-          </div>
-        )}
-  
-        <div style={ProfileStyle.section}>
-          {!isEditing ? (
-            <button 
-              style={ProfileStyle.button} 
-              onClick={() => setIsEditing(true)}
-            >
-              Редактировать профиль
-            </button>
-          ) : (
-            <>
-              <button 
-                style={ProfileStyle.button} 
-                onClick={handleSave}
-              >
-                Сохранить изменения
-              </button>
-              <button 
-                style={ProfileStyle.buttonSecondary} 
-                onClick={() => setIsEditing(false)}
-              >
-                Отмена
-              </button>
-            </>
-          )}
         </div>
-  
-        {error && <p style={ProfileStyle.error}>{error}</p>}
-        {success && <p style={ProfileStyle.success}>{success}</p>}
-      </div>
     );
-  };
-  
-  export default Profile;
+};
+
+export default Profile;

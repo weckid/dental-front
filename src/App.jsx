@@ -10,20 +10,20 @@ import { Login } from "./components/Main/Login/Login"
 import axios from "axios";
 import { StoreContext } from './stores/storeContext';
 import { rootStore } from './stores/rootStore';
+import Profile from './components/Main/Profile/Profile';
+import ProtectedRoute from "./components/Main/Profile/ProtectedRoute";
 
 function App() {
 // Настройка базового URL
 axios.defaults.baseURL = 'http://localhost:8080';
 
 // Добавление интерцептора для JWT
-axios.interceptors.request.use((config) => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user?.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
+axios.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
-}, (error) => {
-  return Promise.reject(error);
 });
    return (
     <StoreContext.Provider value={rootStore}>
@@ -35,6 +35,7 @@ axios.interceptors.request.use((config) => {
         <Route path="/Entry" element={<Entry/>}></Route>
         <Route path="/Catalog" element={<Catalog/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
+        <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
       </Routes>
       <Footer/>
     </StoreContext.Provider>
