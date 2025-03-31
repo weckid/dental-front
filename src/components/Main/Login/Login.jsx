@@ -90,6 +90,20 @@ export const Login = () => {
       );
     }
   };
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('/api/auth/login', {
+        username: 'chort',
+        password: 'ваш_пароль'
+      });
+      
+      localStorage.setItem('token', response.data.token);
+      
+      window.location.href = '/Profile';
+    } catch (error) {
+      console.error('Ошибка авторизации', error);
+    }
+  };
   
 
   return (

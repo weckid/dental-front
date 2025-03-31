@@ -35,7 +35,7 @@ axios.interceptors.request.use(config => {
         <Route path="/Entry" element={<Entry/>}></Route>
         <Route path="/Catalog" element={<Catalog/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
-        <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+        <Route path="/Profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
       </Routes>
       <Footer/>
     </StoreContext.Provider>

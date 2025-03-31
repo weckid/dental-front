@@ -24,7 +24,7 @@ const Profile = () => {
                 setLoading(true);
                 setError(null);
                 
-                const response = await axios.get('/api/profile', {
+                const response = await axios.get('/api/Profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
