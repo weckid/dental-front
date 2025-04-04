@@ -1,23 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./LoginStyle.css";
 import { rootStore } from "../../../stores/rootStore";
 import authService from "../../../api/authService";
 import { useNavigate } from "react-router-dom";
-// import { observer } from "mobx-react-lite";
-
 
 export const Login = () => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formData, setFormData] = useState({
     username: "",
-    email: "", 
+    email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showCookieConsent, setShowCookieConsent] = useState(false);
   const navigate = useNavigate();
   const { authStore } = rootStore;
+
+  useEffect(() => {
+    const consent = localStorage.getItem("cookieConsent");
+    if (!consent) {
+      setShowCookieConsent(true);
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,26 +35,19 @@ export const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
-    // Для регистрации проверяем username
     if (!isLoginMode && !formData.username.trim()) {
       newErrors.username = "Имя пользователя обязательно";
     }
-    
-    // Email проверяем всегда
     if (!formData.email.trim()) {
       newErrors.email = "Email обязателен";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Неверный формат email";
     }
-    
-    // Пароль проверяем всегда
     if (!formData.password.trim()) {
       newErrors.password = "Пароль обязателен";
     } else if (formData.password.length < 8) {
-      newErrors.password = "Пароль должен содержать минимум 6 символов";
+      newErrors.password = "Пароль должен содержать минимум 8 символов";
     }
-  
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -65,66 +64,65 @@ export const Login = () => {
         response = await authService.register({
           username: formData.username,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         });
       }
 
-      console.log("Успех:", response);
-
-      // Сохраняем данные аутентификации
-      authStore.login({
+      const userData = {
         username: response.username,
+        email: formData.email,
         token: response.token,
-        email: formData.email
-      });
+      };
 
+      authStore.login(userData);
       setSuccessMessage(isLoginMode ? "Успешный вход!" : "Регистрация прошла успешно!");
       setErrorMessage("");
-      navigate("/Profile"); // Перенаправляем на главную страницу
-
+      navigate("/Profile");
     } catch (error) {
       console.error("Ошибка:", error);
       setErrorMessage(
-        error.response?.data?.message || 
+        error.response?.data?.message ||
         (isLoginMode ? "Ошибка входа" : "Ошибка регистрации")
       );
     }
   };
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post('/api/auth/login', {
-        username: 'chort',
-        password: 'ваш_пароль'
-      });
-      
-      localStorage.setItem('token', response.data.token);
-      
-      window.location.href = '/Profile';
-    } catch (error) {
-      console.error('Ошибка авторизации', error);
-    }
+
+ 
+
+  const handleCookieConsent = () => {
+    localStorage.setItem("cookieConsent", "true");
+    setShowCookieConsent(false);
   };
-  
+
+  console.log("Rendering, isAuth:", authStore.isAuth);
 
   return (
     <main className="auth-container">
+      {showCookieConsent && (
+        <div className="cookie-consent">
+          <p>
+            Мы используем cookies для улучшения работы сайта. Продолжая, вы соглашаетесь с нашей{" "}
+            <a href="/privacy">политикой</a>.
+          </p>
+          <button onClick={handleCookieConsent} className="primary-button">
+            Принять
+          </button>
+        </div>
+      )}
+
       <div className="auth-card">
         <div className="auth-header">
           <h1>{isLoginMode ? "Вход в систему" : "Создать аккаунт"}</h1>
           <p className="auth-subtitle">
-            {isLoginMode 
-              ? "Введите свои данные для входа" 
+            {isLoginMode
+              ? "Введите свои данные для входа"
               : "Заполните форму для регистрации"}
           </p>
         </div>
-  
-        {successMessage && (
-          <div className="alert alert-success">{successMessage}</div>
-        )}
-        {errorMessage && (
-          <div className="alert alert-error">{errorMessage}</div>
-        )}
-  
+
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        {errorMessage && <div className="alert alert-error">{errorMessage}</div>}
+
         <form onSubmit={handleSubmit} className="auth-form">
           {!isLoginMode && (
             <div className="input-group">
@@ -143,7 +141,7 @@ export const Login = () => {
               )}
             </div>
           )}
-  
+
           <div className="input-group">
             <label htmlFor="email">Email</label>
             <input
@@ -155,11 +153,9 @@ export const Login = () => {
               placeholder="example@mail.com"
               className={errors.email ? "input-error" : ""}
             />
-            {errors.email && (
-              <span className="error-message">{errors.email}</span>
-            )}
+            {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
-  
+
           <div className="input-group">
             <label htmlFor="password">Пароль</label>
             <input
@@ -175,12 +171,14 @@ export const Login = () => {
               <span className="error-message">{errors.password}</span>
             )}
           </div>
-  
+
           <button type="submit" className="primary-button">
             {isLoginMode ? "Войти" : "Зарегистрироваться"}
           </button>
         </form>
-  
+
+       
+
         <div className="auth-footer">
           <p>
             {isLoginMode ? "Ещё нет аккаунта?" : "Уже есть аккаунт?"}

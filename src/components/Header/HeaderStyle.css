@@ -13,7 +13,7 @@
   height: 85px;
   padding: 0 40px;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   position: relative;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   max-width: 1400px;
@@ -31,9 +31,12 @@
 
 /* Desktop Login */
 .desktop-login {
+  display: flex;
+  gap: 20px; /* Расстояние между "Профиль" и "Выход" */
+  align-items: center;
   flex-shrink: 0;
   z-index: 11;
-  margin-left: 20px;
+  /* margin-left: 20px; */
 }
 
 .desktop-login a {
@@ -42,6 +45,7 @@
   font-size: 22px;
   font-weight: 500;
   transition: all 0.3s ease;
+  padding-right: 30px;
 }
 
 .desktop-login a:hover {

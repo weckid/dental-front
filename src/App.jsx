@@ -11,7 +11,7 @@ import axios from "axios";
 import { StoreContext } from './stores/storeContext';
 import { rootStore } from './stores/rootStore';
 import Profile from './components/Main/Profile/Profile';
-import ProtectedRoute from "./components/Main/Profile/ProtectedRoute";
+
 
 function App() {
 // Настройка базового URL
@@ -25,6 +25,11 @@ axios.interceptors.request.use(config => {
   }
   return config;
 });
+const ProtectedRoute = ({ children }) => {
+  const { authStore } = rootStore;
+  console.log("ProtectedRoute: isAuth =", authStore.isAuth);
+  return authStore.isAuth ? children : <Navigate to="/Login" />;
+};
    return (
     <StoreContext.Provider value={rootStore}>
       <Header/>
@@ -35,7 +40,7 @@ axios.interceptors.request.use(config => {
         <Route path="/Entry" element={<Entry/>}></Route>
         <Route path="/Catalog" element={<Catalog/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
-        <Route path="/Profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
+        <Route path="/Profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
       </Routes>
       <Footer/>
     </StoreContext.Provider>

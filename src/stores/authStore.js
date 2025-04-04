@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+
 class AuthStore {
   isAuth = false;
   user = null;
@@ -10,9 +11,12 @@ class AuthStore {
 
   login(userData) {
     this.isAuth = true;
-    this.user = userData;
-    localStorage.setItem("auth", JSON.stringify(userData));
-    console.log("AuthStore: User logged in", userData);
+    this.user = {
+      username: userData.username,
+      email: userData.email,
+    };
+    localStorage.setItem("auth", JSON.stringify(this.user)); // Сохраняем только username и email
+    console.log("AuthStore: User logged in", this.user);
   }
 
   logout() {
@@ -30,7 +34,8 @@ class AuthStore {
       console.log("AuthStore: Loaded user from localStorage", this.user);
     }
   }
-   printState() {
+
+  printState() {
     console.log(`Auth state: isAuth=${this.isAuth}, user=`, this.user);
   }
 }

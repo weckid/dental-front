@@ -3,24 +3,36 @@ import "./HeaderStyle.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import { rootStore } from "../../stores/rootStore";
+import authService from "../../api/authService";
 
 export const Header = observer(() => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { authStore } = rootStore;
-  
+
   const toggleMenu = () => {
     setMenuOpen(!isMenuOpen);
   };
+
   console.log("Header render, isAuth:", authStore.isAuth);
+
   useEffect(() => {
     setMenuOpen(false);
   }, [location]);
 
-  const handleLogout = () => {
-    authStore.logout(); // Вызываем метод выхода из хранилища
-    navigate("/Profile"); // Перенаправляем на главную страницу
+  const handleLogout = async () => {
+    try {
+      console.log("Header: Starting logout process");
+      await authService.logout();
+      authStore.logout();
+      console.log("Header: Logout completed");
+      navigate("/Login");
+    } catch (error) {
+      console.error("Header: Logout error:", error);
+      authStore.logout();
+      navigate("/Login");
+    }
   };
 
   return (
@@ -31,34 +43,41 @@ export const Header = observer(() => {
             <img src="/logo.png" alt="Logo" />
           </Link>
         </div>
-        
-        <div className={`nav ${isMenuOpen ? 'active' : ''}`}>
+
+        <div className={`nav ${isMenuOpen ? "active" : ""}`}>
           <ul>
             <li><Link to="/About">О нас</Link></li>
             <li><Link to="/Contacts">Контакты</Link></li>
             <li><Link to="/Entry">Запись</Link></li>
             <li><Link to="/Catalog">Каталог услуг</Link></li>
+             {authStore.isAuth && (
+              <li className="mobile-login"><Link to="/Profile">Профиль</Link></li>
+            )}
             {authStore.isAuth ? (
               <li className="mobile-login">
-                <Link onClick={handleLogout}>Выход</Link>
+                <Link to="#" onClick={handleLogout}>Выход</Link>
               </li>
             ) : (
               <li className="mobile-login">
                 <Link to="/Login">Вход</Link>
               </li>
+              
             )}
           </ul>
         </div>
-        
+
         <div className="desktop-login">
           {authStore.isAuth ? (
-            <Link onClick={handleLogout}>Выход</Link>
+            <>
+              <Link to="/Profile">Профиль</Link>
+              <Link to="#" onClick={handleLogout}>Выход</Link>
+            </>
           ) : (
             <Link to="/Login">Вход</Link>
           )}
         </div>
-        
-        <button className={`burger-menu ${isMenuOpen ? 'active' : ''}`} onClick={toggleMenu}>
+
+        <button className={`burger-menu ${isMenuOpen ? "active" : ""}`} onClick={toggleMenu}>
           <span></span>
           <span></span>
           <span></span>

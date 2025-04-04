@@ -1,17 +1,31 @@
-// api/authService.js
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "http://localhost:8080/api/auth",
+  withCredentials: true,
+});
+
 const login = async (email, password) => {
-  const response = await axios.post('/api/auth/login', { email, password });
-  return response.data; // { token, username, message }
+  console.log("Login request:", { email, password });
+  const response = await api.post("/login", { email, password });
+  return response.data;
 };
 
 const register = async (userData) => {
-  const response = await axios.post('/api/auth/register', userData);
-  return response.data; // { token, username, message }
+  console.log("Register request:", userData);
+  const response = await api.post("/register", userData);
+  return response.data;
+};
+
+const logout = async () => {
+  console.log("Logout: Sending POST request to /api/auth/logout");
+  const response = await api.post("/logout");
+  console.log("Logout: Response received:", response);
+  return response.data;
 };
 
 export default {
   login,
-  register
+  register,
+  logout,
 };

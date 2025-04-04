@@ -17,6 +17,30 @@
   padding: 2.5rem;
 }
 
+.cookie-consent {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cookie-consent p {
+  margin: 0;
+}
+
+.cookie-consent a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
 .auth-header {
   text-align: center;
   margin-bottom: 2rem;
