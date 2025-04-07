@@ -68,16 +68,10 @@ export const Login = () => {
         });
       }
 
-      const userData = {
-        username: response.username,
-        email: formData.email,
-        token: response.token,
-      };
-
-      authStore.login(userData);
+      authStore.login(response.token); // Передаем только токен
       setSuccessMessage(isLoginMode ? "Успешный вход!" : "Регистрация прошла успешно!");
       setErrorMessage("");
-      navigate("/Profile");
+      navigate("/MainContent"); // Перенаправляем на главную страницу
     } catch (error) {
       console.error("Ошибка:", error);
       setErrorMessage(
@@ -86,8 +80,6 @@ export const Login = () => {
       );
     }
   };
-
- 
 
   const handleCookieConsent = () => {
     localStorage.setItem("cookieConsent", "true");
@@ -176,8 +168,6 @@ export const Login = () => {
             {isLoginMode ? "Войти" : "Зарегистрироваться"}
           </button>
         </form>
-
-       
 
         <div className="auth-footer">
           <p>

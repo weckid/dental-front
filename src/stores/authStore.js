@@ -1,43 +1,65 @@
 import { makeAutoObservable } from "mobx";
+import { jwtDecode } from "jwt-decode";
 
 class AuthStore {
   isAuth = false;
   user = null;
+  roles = [];
+  token = null;
 
   constructor() {
     makeAutoObservable(this);
     this.loadAuthState();
   }
 
-  login(userData) {
-    this.isAuth = true;
-    this.user = {
-      username: userData.username,
-      email: userData.email,
-    };
-    localStorage.setItem("auth", JSON.stringify(this.user)); // Сохраняем только username и email
-    console.log("AuthStore: User logged in", this.user);
+  login(token) {
+    try {
+      const decoded = jwtDecode(token);
+      this.isAuth = true;
+      this.token = token;
+      this.user = {
+        username: decoded.sub || decoded.username,
+        email: decoded.email || "",
+      };
+      this.roles = decoded.roles || decoded.authorities || [];
+      localStorage.setItem("token", token);
+      console.log("AuthStore: User logged in", this.user, "Roles:", this.roles);
+    } catch (error) {
+      console.error("AuthStore: Error decoding token", error);
+      this.logout();
+    }
   }
 
   logout() {
     this.isAuth = false;
     this.user = null;
-    localStorage.removeItem("auth");
+    this.roles = [];
+    this.token = null;
+    localStorage.removeItem("token");
     console.log("AuthStore: User logged out");
   }
 
   loadAuthState() {
-    const authData = localStorage.getItem("auth");
-    if (authData) {
-      this.isAuth = true;
-      this.user = JSON.parse(authData);
-      console.log("AuthStore: Loaded user from localStorage", this.user);
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        this.isAuth = true;
+        this.token = token;
+        this.user = {
+          username: decoded.sub || decoded.username,
+          email: decoded.email || "",
+        };
+        this.roles = decoded.roles || decoded.authorities || [];
+        
+      } catch (error) {
+        console.error("AuthStore: Invalid token in localStorage", error);
+        this.logout();
+      }
     }
   }
 
-  printState() {
-    console.log(`Auth state: isAuth=${this.isAuth}, user=`, this.user);
-  }
+ 
 }
 
 export default AuthStore;

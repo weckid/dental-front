@@ -11,7 +11,7 @@ import axios from "axios";
 import { StoreContext } from './stores/storeContext';
 import { rootStore } from './stores/rootStore';
 import Profile from './components/Main/Profile/Profile';
-
+import  AdminPanel  from "./components/Main/AdminPanel/AdminPanel"
 
 function App() {
 // Настройка базового URL
@@ -41,6 +41,14 @@ const ProtectedRoute = ({ children }) => {
         <Route path="/Catalog" element={<Catalog/>}></Route>
         <Route path="/Login" element={<Login/>}></Route>
         <Route path="/Profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute roles={["ROLE_ADMIN"]}>
+              <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer/>
     </StoreContext.Provider>

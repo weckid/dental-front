@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8080/api/auth",
-  withCredentials: true,
+  withCredentials: true, // Для работы с cookies
 });
 
 const login = async (email, password) => {
@@ -14,7 +14,7 @@ const login = async (email, password) => {
 const register = async (userData) => {
   console.log("Register request:", userData);
   const response = await api.post("/register", userData);
-  return response.data;
+  return response.data; 
 };
 
 const logout = async () => {

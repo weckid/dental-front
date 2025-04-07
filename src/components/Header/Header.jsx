@@ -15,7 +15,7 @@ export const Header = observer(() => {
     setMenuOpen(!isMenuOpen);
   };
 
-  console.log("Header render, isAuth:", authStore.isAuth);
+ 
 
   useEffect(() => {
     setMenuOpen(false);
@@ -35,6 +35,8 @@ export const Header = observer(() => {
     }
   };
 
+  const isAdmin = authStore.isAuth && authStore.roles?.includes("ROLE_ADMIN");
+
   return (
     <div className="header-wrapper">
       <header className="header">
@@ -50,7 +52,10 @@ export const Header = observer(() => {
             <li><Link to="/Contacts">Контакты</Link></li>
             <li><Link to="/Entry">Запись</Link></li>
             <li><Link to="/Catalog">Каталог услуг</Link></li>
-             {authStore.isAuth && (
+            {isAdmin && (
+              <li className="mobile-login"><Link to="/admin">Админ-панель</Link></li>
+            )}
+            {authStore.isAuth && (
               <li className="mobile-login"><Link to="/Profile">Профиль</Link></li>
             )}
             {authStore.isAuth ? (
@@ -61,7 +66,6 @@ export const Header = observer(() => {
               <li className="mobile-login">
                 <Link to="/Login">Вход</Link>
               </li>
-              
             )}
           </ul>
         </div>
@@ -69,6 +73,7 @@ export const Header = observer(() => {
         <div className="desktop-login">
           {authStore.isAuth ? (
             <>
+              {isAdmin && <Link to="/admin">Админ-панель</Link>}
               <Link to="/Profile">Профиль</Link>
               <Link to="#" onClick={handleLogout}>Выход</Link>
             </>
