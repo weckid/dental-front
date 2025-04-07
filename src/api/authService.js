@@ -1,31 +1,24 @@
-import axios from "axios";
-
-const api = axios.create({
-  baseURL: "http://localhost:8080/api/auth",
-  withCredentials: true, // Для работы с cookies
-});
+import apiClient from "./apiClient";
 
 const login = async (email, password) => {
   console.log("Login request:", { email, password });
-  const response = await api.post("/login", { email, password });
+  const response = await apiClient.post("/auth/login", { email, password });
+  console.log("Login response headers:", response.headers); // Проверяем заголовки
+  console.log("Login response data:", response.data);
   return response.data;
 };
 
 const register = async (userData) => {
   console.log("Register request:", userData);
-  const response = await api.post("/register", userData);
-  return response.data; 
+  const response = await apiClient.post("/auth/register", userData);
+  return response.data;
 };
 
 const logout = async () => {
   console.log("Logout: Sending POST request to /api/auth/logout");
-  const response = await api.post("/logout");
+  const response = await apiClient.post("/auth/logout");
   console.log("Logout: Response received:", response);
   return response.data;
 };
 
-export default {
-  login,
-  register,
-  logout,
-};
+export default { login, register, logout };

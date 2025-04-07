@@ -55,7 +55,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     try {
       let response;
       if (isLoginMode) {
@@ -67,11 +67,13 @@ export const Login = () => {
           password: formData.password,
         });
       }
-
-      authStore.login(response.token); // Передаем только токен
+  
+      authStore.login(response.token); // Обновляем authStore
+      console.log("Token from response:", response.token);
+      console.log("Cookies after login:", document.cookie); // Проверяем cookies
       setSuccessMessage(isLoginMode ? "Успешный вход!" : "Регистрация прошла успешно!");
       setErrorMessage("");
-      navigate("/MainContent"); // Перенаправляем на главную страницу
+      navigate("/MainContent");
     } catch (error) {
       console.error("Ошибка:", error);
       setErrorMessage(

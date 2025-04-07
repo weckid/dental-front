@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../../api/apiClient"; 
 import "./ProfileStyle.css";
 import { rootStore } from "../../../stores/rootStore";
 
@@ -21,19 +21,22 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-  const [phoneError, setPhoneError] = useState(""); // Состояние для ошибки номера телефона
+  const [phoneError, setPhoneError] = useState("");
   const navigate = useNavigate();
   const { authStore } = rootStore;
 
   useEffect(() => {
     const fetchUserData = async () => {
+      if (!authStore.isAuth) {
+        navigate("/Login");
+        return;
+      }
+
       try {
         setLoading(true);
         setError(null);
 
-        const response = await axios.get("http://localhost:8080/api/auth/profile", {
-          withCredentials: true,
-        });
+        const response = await apiClient.get("/auth/profile");
 
         const data = {
           login: response.data.username || "",
@@ -63,8 +66,6 @@ const Profile = () => {
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditData((prev) => ({ ...prev, [name]: value }));
-
-    // Валидация номера телефона при изменении
     if (name === "phone") {
       validatePhone(value);
     }
@@ -74,25 +75,23 @@ const Profile = () => {
     setPhotoFile(e.target.files[0]);
   };
 
-  // Функция валидации номера телефона
   const validatePhone = (phone) => {
-    const phoneRegex = /^\+?\d{10,11}$/; // Пример: +79991234567 или 89991234567
+    const phoneRegex = /^\+?\d{10,11}$/;
     if (!phone) {
-      setPhoneError(""); // Пустое поле допустимо
+      setPhoneError("");
+      return true;
     } else if (!phoneRegex.test(phone)) {
       setPhoneError("Введите корректный номер телефона (10-11 цифр, можно с +)");
-    } else {
-      setPhoneError("");
+      return false;
     }
-    return phoneRegex.test(phone) || !phone; // Возвращаем true, если номер валиден или пустой
+    setPhoneError("");
+    return true;
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-
-    // Проверяем валидность номера телефона перед отправкой
     if (!validatePhone(editData.phone)) {
-      return; // Прерываем отправку, если номер некорректен
+      return;
     }
 
     try {
@@ -108,16 +107,7 @@ const Profile = () => {
       if (editData.oldPassword) formData.append("oldPassword", editData.oldPassword);
       if (editData.newPassword) formData.append("newPassword", editData.newPassword);
 
-      const response = await axios.patch(
-        "http://localhost:8080/api/auth/profile",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await apiClient.patch("/auth/profile", formData);
 
       const updatedData = {
         login: response.data.username || "",
@@ -131,11 +121,15 @@ const Profile = () => {
       setEditData({ ...updatedData, oldPassword: "", newPassword: "" });
       setSuccessMessage("Профиль успешно обновлён!");
       setIsEditing(false);
-      setPhoneError(""); // Очищаем ошибку после успешной отправки
+      setPhoneError("");
       setPhotoFile(null);
     } catch (error) {
       console.error("Error updating profile:", error);
       setError(error.response?.data?.message || "Ошибка при обновлении профиля");
+      if (error.response?.status === 401) {
+        authStore.logout();
+        navigate("/Login");
+      }
     }
   };
 
@@ -166,9 +160,7 @@ const Profile = () => {
     <div className="profile-page">
       <div className="profile-content">
         <h1 className="profile-title">Мой профиль</h1>
-
         {successMessage && <div className="success-message">{successMessage}</div>}
-
         {!isEditing ? (
           <div className="profile-info">
             <img
