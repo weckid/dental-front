@@ -1,25 +1,64 @@
 import React, { useState, useEffect } from "react";
 import "./CatalogStyle.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { rootStore } from "../../../stores/rootStore"; // Импортируем rootStore
 
 export const Catalog = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [cards, setCards] = useState([]);
   const [categories, setCategories] = useState([]);
+  const navigate = useNavigate();
+  const { authStore } = rootStore; // Получаем authStore
 
   useEffect(() => {
     fetch("http://localhost:8080/api/categories")
       .then((res) => res.json())
-      .then((data) => setCategories(data));
+      .then((data) => setCategories(data))
+      .catch((err) => console.error("Ошибка загрузки категорий:", err));
 
-    fetch(`http://localhost:8080/api/cards?category=${activeFilter}`)
+    fetch(`http://localhost:8080/api/cards?category=${activeFilter}`, {
+      headers: {
+        Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
-      .then((data) => setCards(data));
-  }, [activeFilter]);
+      .then((data) => setCards(data))
+      .catch((err) => console.error("Ошибка загрузки карточек:", err));
+  }, [activeFilter, authStore.token]);
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
+
+  const handleDelete = (cardId) => {
+    if (window.confirm("Вы уверены, что хотите удалить эту услугу?")) {
+      fetch(`http://localhost:8080/api/cards/${cardId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            setCards(cards.filter((card) => card.id !== cardId));
+            alert("Услуга удалена");
+          } else {
+            throw new Error("Ошибка удаления");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Не удалось удалить услугу");
+        });
+    }
+  };
+
+  const handleEdit = (cardId) => {
+    navigate(`/edit-card/${cardId}`); // Перенаправляем на страницу редактирования
+  };
+
+  // Проверяем, является ли пользователь администратором
+  const isAdmin = authStore.isAuth && authStore.roles.includes("ROLE_ADMIN");
 
   return (
     <main>
@@ -54,6 +93,22 @@ export const Catalog = () => {
                   <h3>{card.price}</h3>
                   <div className="button_card">
                     <Link to="/Entry">Записаться на прием</Link>
+                    {isAdmin && (
+                      <>
+                        <button
+                          className="edit-btn"
+                          onClick={() => handleEdit(card.id)}
+                        >
+                          Редактировать
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => handleDelete(card.id)}
+                        >
+                          Удалить
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

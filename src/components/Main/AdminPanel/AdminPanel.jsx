@@ -53,36 +53,36 @@ const AdminPanel = () => {
 
   return (
     <main>
-      <div className="container">
-        <section className="admin-panel">
-          <div className="catalog_title">
-            <div className="heading">
+      <div className="admin-container">
+        <section className="admin-panel-section">
+          <div className="admin-title">
+            <div className="admin-heading">
               <h1>Админ-панель: Пользователи</h1>
             </div>
           </div>
 
           {/* Секция поиска */}
-          <div className="search-section">
+          <div className="admin-search-section">
             <input
               type="text"
               placeholder="Поиск по имени или email..."
               value={searchQuery}
               onChange={handleSearch}
-              className="search-input"
+              className="admin-search-input"
             />
           </div>
 
           {/* Список пользователей */}
-          <div className="content_cards">
+          <div className="admin-users-list">
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user) => (
-                <div key={user.id} className="catalog_card">
+                <div key={user.id} className="admin-user-card">
                   <img
                     src={user.photoUrl || "/anonymous.jpg"}
                     alt={user.username}
                     onError={(e) => (e.target.src = "/anonymous.jpg")}
                   />
-                  <div className="text_card_catalog">
+                  <div className="admin-user-info">
                     <h2>{user.username}</h2>
                     <p>Email: {user.email}</p>
                     <p>Роли: {user.roles.map((role) => role.name).join(", ")}</p>
@@ -90,7 +90,7 @@ const AdminPanel = () => {
                 </div>
               ))
             ) : (
-              <p className="no-users">Пользователи не найдены</p>
+              <p className="admin-no-users">Пользователи не найдены</p>
             )}
           </div>
         </section>
