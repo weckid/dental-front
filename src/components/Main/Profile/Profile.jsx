@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import apiClient from "../../../api/apiClient"; 
+import apiClient from "../../../api/apiClient";
 import "./ProfileStyle.css";
 import { rootStore } from "../../../stores/rootStore";
 
 const anonymousAvatar = "/anonymous.jpg";
+const BASE_URL = "http://localhost:8080"; // Базовый URL сервера
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -44,7 +45,7 @@ const Profile = () => {
           firstName: response.data.firstName || "",
           lastName: response.data.lastName || "",
           phone: response.data.phone || "",
-          photoUrl: response.data.photoUrl || "",
+          photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "", // Полный URL
         };
         setUserData(data);
         setEditData({ ...data, oldPassword: "", newPassword: "" });
@@ -107,7 +108,18 @@ const Profile = () => {
       if (editData.oldPassword) formData.append("oldPassword", editData.oldPassword);
       if (editData.newPassword) formData.append("newPassword", editData.newPassword);
 
-      const response = await apiClient.patch("/auth/profile", formData);
+      console.log("Отправляемые данные:");
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+
+      const response = await apiClient.patch("/auth/profile", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Ответ сервера:", response.data); // Отладка ответа
 
       const updatedData = {
         login: response.data.username || "",
@@ -115,7 +127,7 @@ const Profile = () => {
         firstName: response.data.firstName || "",
         lastName: response.data.lastName || "",
         phone: response.data.phone || "",
-        photoUrl: response.data.photoUrl || "",
+        photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "", // Полный URL
       };
       setUserData(updatedData);
       setEditData({ ...updatedData, oldPassword: "", newPassword: "" });
@@ -125,7 +137,8 @@ const Profile = () => {
       setPhotoFile(null);
     } catch (error) {
       console.error("Error updating profile:", error);
-      setError(error.response?.data?.message || "Ошибка при обновлении профиля");
+      const errorMessage = error.response?.data?.message || "Ошибка при обновлении профиля";
+      setError(errorMessage);
       if (error.response?.status === 401) {
         authStore.logout();
         navigate("/Login");
@@ -167,6 +180,10 @@ const Profile = () => {
               src={userData.photoUrl || anonymousAvatar}
               alt="Profile"
               className="profile-photo"
+              onError={(e) => {
+                console.log("Ошибка загрузки изображения:", userData.photoUrl); // Отладка
+                e.target.src = anonymousAvatar;
+              }}
             />
             <div className="profile-field">
               <span className="profile-label">Логин:</span>

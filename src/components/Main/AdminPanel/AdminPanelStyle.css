@@ -1,4 +1,4 @@
-/* AdminPanelStyle.css */
+AdminPanelStyle.css
 
 .admin-container {
   font-family: 'Poppins', sans-serif;
@@ -102,6 +102,35 @@
   color: #64748b;
   margin-bottom: 0.5rem;
 }
+.admin-delete-btn {
+  padding: 0.5rem 1.25rem;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.75rem;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.admin-delete-btn:hover {
+  background-color: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(239, 68, 68, 0.3);
+}
+
+.admin-delete-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.4);
+}
+
+.admin-delete-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.3);
+}
 
 /* Роли пользователей */
 .role-tag {
@@ -156,6 +185,10 @@
     padding: 1.5rem;
     gap: 1rem;
   }
+  .admin-delete-btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+  }
   
   .admin-search-section {
     padding: 1rem;
@@ -179,5 +212,9 @@
   .admin-user-card img {
     width: 80px;
     height: 80px;
+  }
+  .admin-delete-btn {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.8rem;
   }
 }
