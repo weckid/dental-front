@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { rootStore } from "../../../stores/rootStore";
-import "./EditCardStyle.css"; 
+import "./EditCardStyle.css";
 
 const EditCard = () => {
   const { id } = useParams();
@@ -19,13 +19,21 @@ const EditCard = () => {
 
   useEffect(() => {
     const fetchCard = async () => {
+      if (!authStore.isAuth || !authStore.token) {
+        setError("Вы не авторизованы");
+        setLoading(false);
+        return;
+      }
+
       try {
         setLoading(true);
+        console.log("Токен для GET:", authStore.token); // Отладка токена
         const response = await fetch(`http://localhost:8080/api/cards/${id}`, {
           headers: { Authorization: `Bearer ${authStore.token}` },
         });
         if (!response.ok) {
-          throw new Error("Не удалось загрузить данные карточки");
+          const errorText = await response.text();
+          throw new Error(`Не удалось загрузить данные карточки: ${errorText}`);
         }
         const data = await response.json();
         setCard(data);
@@ -38,11 +46,18 @@ const EditCard = () => {
     };
 
     fetchCard();
-  }, [id, authStore.token]);
+  }, [id, authStore.token, authStore.isAuth]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!authStore.isAuth || !authStore.token) {
+      setError("Вы не авторизованы");
+      return;
+    }
+
     try {
+      console.log("Токен для PUT:", authStore.token); // Отладка токена
+      console.log("Отправляемые данные:", card); // Отладка данных
       const response = await fetch(`http://localhost:8080/api/cards/${id}`, {
         method: "PUT",
         headers: {
@@ -52,7 +67,8 @@ const EditCard = () => {
         body: JSON.stringify(card),
       });
       if (!response.ok) {
-        throw new Error("Не удалось обновить карточку");
+        const errorText = await response.text();
+        throw new Error(`Не удалось обновить карточку: ${errorText}`);
       }
       navigate("/Catalog");
     } catch (err) {
