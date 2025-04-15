@@ -12,9 +12,10 @@ export const Catalog = () => {
     title: "",
     description: "",
     price: "",
-    image: null, // Теперь image будет файлом, а не строкой
+    image: null,
     categoryCode: "All",
   });
+  const [priceError, setPriceError] = useState(""); // Для валидации цены
   const navigate = useNavigate();
   const { authStore } = rootStore;
 
@@ -72,12 +73,22 @@ export const Catalog = () => {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setNewCard({ title: "", description: "", price: "", image: null, categoryCode: "All" });
+    setPriceError("");
   };
 
   const handleNewCardChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image") {
-      setNewCard((prev) => ({ ...prev, image: files[0] })); // Сохраняем файл
+    if (name === "price") {
+      // Валидация: только цифры и одна десятичная точка
+      const isValidPrice = /^[0-9]*\.?[0-9]{0,2}$/.test(value) || value === "";
+      if (!isValidPrice) {
+        setPriceError("Цена должна быть числом");
+        return;
+      }
+      setPriceError("");
+      setNewCard((prev) => ({ ...prev, price: value }));
+    } else if (name === "image") {
+      setNewCard((prev) => ({ ...prev, image: files[0] }));
     } else {
       setNewCard((prev) => ({ ...prev, [name]: value }));
     }
@@ -85,23 +96,32 @@ export const Catalog = () => {
 
   const handleNewCardSubmit = async (e) => {
     e.preventDefault();
+    if (priceError || !newCard.price) {
+      alert("Исправьте цену перед сохранением");
+      return;
+    }
+    if (!authStore.isAuth || !authStore.token) {
+      alert("Вы не авторизованы");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", newCard.title);
     formData.append("description", newCard.description);
     formData.append("price", newCard.price);
     if (newCard.image) {
-      formData.append("image", newCard.image); // Отправляем файл
+      formData.append("image", newCard.image);
     }
     formData.append("categoryCode", newCard.categoryCode);
 
-    console.log("Токен для POST:", authStore.token || localStorage.getItem("token")); // Отладка токена
+    console.log("Токен для POST:", authStore.token || localStorage.getItem("token"));
     try {
       const response = await fetch("http://localhost:8080/api/cards", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
         },
-        body: formData, // Отправляем FormData вместо JSON
+        body: formData,
       });
       if (!response.ok) {
         const errorText = await response.text();
@@ -112,8 +132,8 @@ export const Catalog = () => {
       handleModalClose();
       alert("Карточка добавлена");
     } catch (err) {
-      console.error(err);
-      alert("Не удалось добавить карточку");
+      console.error("Ошибка добавления карточки:", err);
+      alert(`Не удалось добавить карточку: ${err.message}`);
     }
   };
 
@@ -156,7 +176,7 @@ export const Catalog = () => {
                 <div className="text_card_catalog">
                   <h2>{card.title}</h2>
                   <p>{card.description}</p>
-                  <h3>{card.price}</h3>
+                  <h3>{card.price} ₽</h3> {/* Добавляем знак рубля */}
                   <div className="button_card">
                     <Link to="/Entry">Записаться на прием</Link>
                     {isAdmin && (
@@ -208,20 +228,26 @@ export const Catalog = () => {
                 </label>
                 <label>
                   Цена:
-                  <input
-                    type="text"
-                    name="price"
-                    value={newCard.price}
-                    onChange={handleNewCardChange}
-                    required
-                  />
+                  <div className="price-input-wrapper">
+                    <input
+                      type="text"
+                      name="price"
+                      value={newCard.price}
+                      onChange={handleNewCardChange}
+                      required
+                      pattern="[0-9]*\.?[0-9]{0,2}"
+                      placeholder="1500.00"
+                    />
+                    <span className="ruble-sign">₽</span> {/* Знак рубля рядом */}
+                  </div>
+                  {priceError && <p className="error">{priceError}</p>}
                 </label>
                 <label>
                   Изображение:
                   <input
                     type="file"
                     name="image"
-                    accept="image/jpeg,image/png,image/jpg" // Ограничение на форматы
+                    accept="image/jpeg,image/png,image/jpg"
                     onChange={handleNewCardChange}
                     required
                   />
