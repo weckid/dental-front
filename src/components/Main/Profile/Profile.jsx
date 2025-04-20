@@ -5,7 +5,7 @@ import "./ProfileStyle.css";
 import { rootStore } from "../../../stores/rootStore";
 
 const anonymousAvatar = "/anonymous.jpg";
-const BASE_URL = "http://localhost:8080"; // Базовый URL сервера
+const BASE_URL = "http://localhost:8080";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -45,7 +45,7 @@ const Profile = () => {
           firstName: response.data.firstName || "",
           lastName: response.data.lastName || "",
           phone: response.data.phone || "",
-          photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "", // Полный URL
+          photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "",
         };
         setUserData(data);
         setEditData({ ...data, oldPassword: "", newPassword: "" });
@@ -119,7 +119,7 @@ const Profile = () => {
         },
       });
 
-      console.log("Ответ сервера:", response.data); // Отладка ответа
+      console.log("Ответ сервера:", response.data);
 
       const updatedData = {
         login: response.data.username || "",
@@ -127,7 +127,7 @@ const Profile = () => {
         firstName: response.data.firstName || "",
         lastName: response.data.lastName || "",
         phone: response.data.phone || "",
-        photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "", // Полный URL
+        photoUrl: response.data.photoUrl ? `${BASE_URL}${response.data.photoUrl}` : "",
       };
       setUserData(updatedData);
       setEditData({ ...updatedData, oldPassword: "", newPassword: "" });
@@ -135,6 +135,22 @@ const Profile = () => {
       setIsEditing(false);
       setPhoneError("");
       setPhotoFile(null);
+
+      // Проверка доступности изображения
+      if (response.data.photoUrl) {
+        const imgUrl = `${BASE_URL}${response.data.photoUrl}`;
+        fetch(imgUrl)
+          .then(res => {
+            if (!res.ok) {
+              console.error("Ошибка проверки изображения:", imgUrl);
+              setError(`Не удалось загрузить изображение: ${imgUrl}`);
+            }
+          })
+          .catch(err => {
+            console.error("Ошибка проверки изображения:", err);
+            setError(`Не удалось загрузить изображение: ${imgUrl}`);
+          });
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       const errorMessage = error.response?.data?.message || "Ошибка при обновлении профиля";
@@ -181,7 +197,7 @@ const Profile = () => {
               alt="Profile"
               className="profile-photo"
               onError={(e) => {
-                console.log("Ошибка загрузки изображения:", userData.photoUrl); // Отладка
+                console.log("Ошибка загрузки изображения:", userData.photoUrl);
                 e.target.src = anonymousAvatar;
               }}
             />
