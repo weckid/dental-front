@@ -1,7 +1,7 @@
 /* Основные стили */
 main {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
+  /* background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%); */
   padding: 70px 0;
   min-height: 100vh;
 }
@@ -43,7 +43,13 @@ main {
   list-style: none;
   overflow-x: auto;
 }
-
+.access-denied {
+  color: #ff4d4f;
+  font-weight: bold;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
 .list li {
   font-size: 16px;
   font-weight: 500;
@@ -187,7 +193,24 @@ main {
   transition: background-color 0.3s ease, transform 0.2s ease;
   min-width: 140px;
 }
+.book-btn {
+  background: #5ac3fe;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  min-width: 140px;
+  text-align: center;
+}
 
+.book-btn:hover {
+  background: #4da7e7;
+  transform: translateY(-2px);
+}
 .edit-btn:hover {
   background: #059669;
   transform: translateY(-2px);

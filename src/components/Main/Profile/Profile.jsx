@@ -79,8 +79,8 @@ const Profile = () => {
   const validatePhone = (phone) => {
     const phoneRegex = /^\+?\d{10,11}$/;
     if (!phone) {
-      setPhoneError("");
-      return true;
+      setPhoneError("Номер телефона обязателен");
+      return false;
     } else if (!phoneRegex.test(phone)) {
       setPhoneError("Введите корректный номер телефона (10-11 цифр, можно с +)");
       return false;
@@ -91,6 +91,13 @@ const Profile = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+
+    // Проверка обязательных полей
+    if (!editData.login || !editData.email || !editData.firstName || !editData.lastName || !editData.phone) {
+      setError("Все поля, кроме пароля, обязательны для заполнения");
+      return;
+    }
+
     if (!validatePhone(editData.phone)) {
       return;
     }
@@ -136,17 +143,20 @@ const Profile = () => {
       setPhoneError("");
       setPhotoFile(null);
 
+      // Обновление данных в authStore (если требуется)
+      authStore.updateUser(updatedData);
+
       // Проверка доступности изображения
       if (response.data.photoUrl) {
         const imgUrl = `${BASE_URL}${response.data.photoUrl}`;
         fetch(imgUrl)
-          .then(res => {
+          .then((res) => {
             if (!res.ok) {
               console.error("Ошибка проверки изображения:", imgUrl);
               setError(`Не удалось загрузить изображение: ${imgUrl}`);
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.error("Ошибка проверки изображения:", err);
             setError(`Не удалось загрузить изображение: ${imgUrl}`);
           });
@@ -236,6 +246,7 @@ const Profile = () => {
                 name="login"
                 value={editData.login}
                 onChange={handleEditChange}
+                required
               />
             </div>
             <div className="profile-field">
@@ -245,6 +256,7 @@ const Profile = () => {
                 name="email"
                 value={editData.email}
                 onChange={handleEditChange}
+                required
               />
             </div>
             <div className="profile-field">
@@ -254,6 +266,7 @@ const Profile = () => {
                 name="firstName"
                 value={editData.firstName}
                 onChange={handleEditChange}
+                required
               />
             </div>
             <div className="profile-field">
@@ -263,6 +276,7 @@ const Profile = () => {
                 name="lastName"
                 value={editData.lastName}
                 onChange={handleEditChange}
+                required
               />
             </div>
             <div className="profile-field">
@@ -274,6 +288,7 @@ const Profile = () => {
                   value={editData.phone}
                   onChange={handleEditChange}
                   placeholder="+79991234567"
+                  required
                 />
                 {phoneError && <span className="phone-error">{phoneError}</span>}
               </div>

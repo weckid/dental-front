@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom"; // Убираем Br
 import { Footer } from "./components/Footer/Footer";
 import About from "./components/Main/About/About";
 import { Contacts } from "./components/Main/Contacts/Contacts";
-import { Entry } from "./components/Main/Entry/Entry";
+import { Entry }  from "./components/Main/Entry/Entry";
 import { Catalog } from "./components/Main/Catalog/Catalog";
 import { Login } from "./components/Main/Login/Login";
 import axios from "axios";
@@ -13,6 +13,9 @@ import { rootStore } from './stores/rootStore';
 import Profile from './components/Main/Profile/Profile';
 import AdminPanel from "./components/Main/AdminPanel/AdminPanel";
 import EditCard from "./components/Main/EditCard/EditCard";
+import {Appointment} from "./components/Main/Appointment/Appointment";
+import {Appointments} from "./components/Main/Appointment/Appointments";
+import DoctorPanel from "./components//Main/DoctorPanel/DoctorPanel";
 
 function App() {
   axios.defaults.baseURL = 'http://localhost:8080';
@@ -59,6 +62,31 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/appointment/:id"
+          element={
+            <ProtectedRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <Appointment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/Appointments"
+          element={
+            <ProtectedRoute roles={["ROLE_USER", "ROLE_ADMIN"]}>
+              <Appointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor"
+          element={
+            <ProtectedRoute roles={["ROLE_DOCTOR"]}>
+              <DoctorPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/Entry/:cardId" element={<Entry />} />
       </Routes>
       <Footer />
     </StoreContext.Provider>

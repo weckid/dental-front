@@ -1,0 +1,174 @@
+/* DoctorPanelStyle.css */
+
+.doctor-panel-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    font-family: 'Poppins', sans-serif;
+}
+
+.doctor-panel-container h1 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #5ac3fe;
+}
+
+.appointments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.appointment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-left: 6px solid #5ac3fe;
+    transition: all 0.3s ease;
+}
+
+.appointment-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-details {
+    flex: 1;
+}
+
+.appointment-details h3 {
+    font-size: 1.4rem;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.appointment-details p {
+    color: #475569;
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+}
+
+.appointment-actions {
+    margin-left: 1.5rem;
+}
+
+.action-select {
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e293b;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.action-select:focus {
+    outline: none;
+    border-color: #5ac3fe;
+    box-shadow: 0 0 0 3px rgba(90, 195, 254, 0.2);
+}
+
+.action-select option {
+    padding: 0.5rem;
+}
+
+/* Стили для статусов */
+.status-pending {
+    color: #F59E0B;
+    font-weight: 600;
+}
+
+.status-completed {
+    color: #10B981;
+    font-weight: 600;
+}
+
+.status-cancelled {
+    color: #EF4444;
+    font-weight: 600;
+}
+
+/* Адаптация для 992px */
+@media (max-width: 992px) {
+    .doctor-panel-container {
+        padding: 1.5rem;
+    }
+    
+    .appointment-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    
+    .appointment-actions {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .action-select {
+        width: 100%;
+    }
+}
+
+/* Адаптация для 768px */
+@media (max-width: 768px) {
+    .doctor-panel-container {
+        padding: 1.2rem;
+    }
+    
+    .doctor-panel-container h1 {
+        font-size: 1.8rem;
+    }
+    
+    .appointment-item {
+        padding: 1.2rem;
+    }
+    
+    .appointment-details h3 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Адаптация для 576px */
+@media (max-width: 576px) {
+    .doctor-panel-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .doctor-panel-container h1 {
+        font-size: 1.6rem;
+        padding-bottom: 0.8rem;
+    }
+    
+    .appointment-details h3 {
+        font-size: 1.2rem;
+    }
+    
+    .appointment-details p {
+        font-size: 0.9rem;
+    }
+    
+    .action-select {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+}

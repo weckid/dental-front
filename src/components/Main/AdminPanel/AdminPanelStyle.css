@@ -2,7 +2,7 @@ AdminPanelStyle.css
 
 .admin-container {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
+  /* background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%); */
   min-height: 100vh;
   /* padding: 2rem; */
 }

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { rootStore } from "../../../stores/rootStore";
@@ -5,7 +6,6 @@ import apiClient from "../../../api/apiClient";
 import "./EditCardStyle.css";
 
 const BASE_URL = "http://localhost:8080";
-const defaultImage = "/default-card.jpg";
 
 const EditCard = () => {
   const { id } = useParams();
@@ -20,7 +20,6 @@ const EditCard = () => {
   });
   const [categories, setCategories] = useState([]);
   const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
   const [priceError, setPriceError] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -41,14 +40,6 @@ const EditCard = () => {
         console.log("Ответ GET /api/cards/", id, ":", cardResponse.data);
         const cardData = cardResponse.data;
         setCard(cardData);
-        // Проверяем, начинается ли путь с /Uploads/
-        const imagePath = cardData.image && cardData.image.startsWith('/Uploads/') 
-          ? `${BASE_URL}${cardData.image}` 
-          : cardData.image 
-            ? `${BASE_URL}/Uploads/cards/${cardData.image}` 
-            : defaultImage;
-        setImagePreview(imagePath);
-        console.log("Установлен imagePreview:", imagePath);
 
         // Загрузка категорий
         const categoriesResponse = await apiClient.get("/categories");
@@ -91,12 +82,8 @@ const EditCard = () => {
     const file = e.target.files[0];
     if (file && ["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
       setImageFile(file);
-      const reader = new FileReader();
-      reader.onload = () => setImagePreview(reader.result);
-      reader.readAsDataURL(file);
     } else {
       setImageFile(null);
-      setImagePreview(card.image ? `${BASE_URL}${card.image}` : defaultImage);
       alert("Пожалуйста, выберите файл формата PNG, JPEG или JPG");
     }
   };
@@ -142,12 +129,12 @@ const EditCard = () => {
   };
 
   if (loading) {
-    return <div className="loading">Загрузка...</div>;
+    return <div className="edit-card-loading">Загрузка...</div>;
   }
 
   if (error) {
     return (
-      <div className="error">
+      <div className="edit-card-error">
         <p>{error}</p>
         <button onClick={() => navigate("/Catalog")}>Вернуться к каталогу</button>
       </div>
@@ -158,7 +145,7 @@ const EditCard = () => {
     <div className="edit-card-container">
       <h1>Редактировать услугу</h1>
       <form onSubmit={handleSubmit} className="edit-card-form">
-        <div className="form-group">
+        <div className="edit-card-form-group">
           <label>Название</label>
           <input
             name="title"
@@ -168,7 +155,7 @@ const EditCard = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="edit-card-form-group">
           <label>Описание</label>
           <textarea
             name="description"
@@ -178,9 +165,9 @@ const EditCard = () => {
             required
           />
         </div>
-        <div className="form-group">
+        <div className="edit-card-form-group">
           <label>Цена (₽)</label>
-          <div className="price-input-wrapper">
+          <div className="edit-card-price-input-wrapper">
             <input
               name="price"
               value={card.price}
@@ -189,11 +176,11 @@ const EditCard = () => {
               pattern="[0-9]*\.?[0-9]{0,2}"
               required
             />
-            <span className="ruble-sign">₽</span>
+            <span className="edit-card-ruble-sign">₽</span>
           </div>
-          {priceError && <p className="error-message">{priceError}</p>}
+          {priceError && <p className="edit-card-error-message">{priceError}</p>}
         </div>
-        <div className="form-group">
+        <div className="edit-card-form-group">
           <label>Категория</label>
           <select
             name="categoryCode"
@@ -209,32 +196,21 @@ const EditCard = () => {
             ))}
           </select>
         </div>
-        <div className="form-group">
+        <div className="edit-card-form-group">
           <label>Изображение (PNG, JPEG, JPG)</label>
           <input
             type="file"
             accept="image/png,image/jpeg,image/jpg"
             onChange={handleFileChange}
           />
-          {imagePreview && (
-            <img
-              src={imagePreview}
-              alt="Preview"
-              className="image-preview"
-              onError={(e) => {
-                console.log("Ошибка загрузки превью:", imagePreview);
-                e.target.src = defaultImage;
-              }}
-            />
-          )}
         </div>
-        <div className="form-actions">
-          <button type="submit" className="save-btn" disabled={!!priceError}>
+        <div className="edit-card-form-actions">
+          <button type="submit" className="edit-card-save-btn" disabled={!!priceError}>
             Сохранить
           </button>
           <button
             type="button"
-            className="cancel-btn"
+            className="edit-card-cancel-btn"
             onClick={() => navigate("/Catalog")}
           >
             Отмена

@@ -1,9 +1,9 @@
 /* Base Styles */
 .main-container {
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%);
-  min-height: 100vh;
-  /* padding: 32px; */
+  /* background: linear-gradient(135deg, #4da7e7 0%, #5ac3fe 100%); */
+  min-height: 80vh;
+  /* padding: 40px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,7 +11,7 @@
 
 .main-content {
   max-width: 1500px;
-  width: 1500px;
+  width: 1400px;
   background-color: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);

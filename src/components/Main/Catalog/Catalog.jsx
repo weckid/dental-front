@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./CatalogStyle.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { rootStore } from "../../../stores/rootStore";
+import apiClient from "../../../api/apiClient";
+
+const BASE_URL = "http://localhost:8080";
+const defaultImage = "http://localhost:5173/default.jpg";
 
 export const Catalog = () => {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -25,7 +29,9 @@ export const Catalog = () => {
   const navigate = useNavigate();
   const { authStore } = rootStore;
 
-  // Функция для форматирования цены с пробелами
+  // Проверка, является ли пользователь доктором или админом
+  const isDoctorOrAdmin = authStore.roles.includes("ROLE_DOCTOR") || authStore.roles.includes("ROLE_ADMIN");
+
   const formatPrice = (price) => {
     if (!price) return "";
     const [integerPart, decimalPart] = price.toString().split(".");
@@ -33,73 +39,73 @@ export const Catalog = () => {
     return decimalPart !== undefined ? `${formattedInteger}.${decimalPart}` : formattedInteger;
   };
 
-  useEffect(() => {
-    fetch("http://localhost:8080/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error("Ошибка загрузки категорий:", err));
+  const getImageUrl = (image) => {
+    if (!image) {
+      console.log("Изображение отсутствует, используется defaultImage");
+      return defaultImage;
+    }
+    let normalizedImage = image.replace(/(http:\/\/localhost:8080)+/, "");
+    normalizedImage = normalizedImage.replace(/^\/+/, "");
+    if (!normalizedImage.startsWith("Uploads/cards/")) {
+      normalizedImage = `Uploads/cards/${normalizedImage}`;
+    }
+    const fullUrl = `${BASE_URL}/${normalizedImage}`;
+    console.log("Формируем URL изображения:", fullUrl);
+    return fullUrl;
+  };
 
-    fetch(`http://localhost:8080/api/cards?category=${activeFilter}`, {
-      headers: {
-        Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setCards(data))
-      .catch((err) => console.error("Ошибка загрузки карточек:", err));
-  }, [activeFilter, authStore.token]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesResponse = await apiClient.get("/categories");
+        console.log("Категории:", categoriesResponse.data);
+        setCategories(categoriesResponse.data);
+
+        const cardsResponse = await apiClient.get("/cards", {
+          params: { category: activeFilter },
+        });
+        console.log("Карточки:", cardsResponse.data);
+        setCards(cardsResponse.data);
+      } catch (err) {
+        console.error("Ошибка загрузки данных:", err);
+        alert("Не удалось загрузить данные: " + (err.response?.data?.message || err.message));
+      }
+    };
+
+    fetchData();
+  }, [activeFilter]);
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
   };
 
-  const handleDelete = (cardId) => {
-    if (window.confirm("Вы уверены, что хотите удалить эту услугу?")) {
-      fetch(`http://localhost:8080/api/cards/${cardId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            setCards(cards.filter((card) => card.id !== cardId));
-            alert("Услуга удалена");
-          } else {
-            throw new Error("Ошибка удаления");
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Не удалось удалить услугу");
-        });
+  const handleDelete = async (cardId) => {
+    if (!window.confirm("Вы уверены, что хотите удалить эту услугу?")) return;
+
+    try {
+      await apiClient.delete(`/cards/${cardId}`);
+      setCards(cards.filter((card) => card.id !== cardId));
+      alert("Услуга удалена");
+    } catch (err) {
+      console.error("Ошибка удаления карточки:", err);
+      alert("Не удалось удалить услугу: " + (err.response?.data?.message || err.message));
     }
   };
 
-  const handleDeleteCategory = (code) => {
-    if (window.confirm("Вы уверены, что хотите удалить категорию? Все связанные услуги также будут удалены.")) {
-      fetch(`http://localhost:8080/api/categories/${code}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => {
-          if (res.ok) {
-            setCategories(categories.filter((cat) => cat.code !== code));
-            setCards(cards.filter((card) => card.categoryCode !== code));
-            if (activeFilter === code) {
-              setActiveFilter("All");
-            }
-            alert("Категория и связанные услуги удалены");
-          } else {
-            throw new Error("Ошибка удаления категории");
-          }
-        })
-        .catch((err) => {
-          console.error("Ошибка удаления категории:", err);
-          alert("Не удалось удалить категорию");
-        });
+  const handleDeleteCategory = async (code) => {
+    if (!window.confirm("Вы уверены, что хотите удалить категорию? Все связанные услуги также будут удалены.")) return;
+
+    try {
+      await apiClient.delete(`/categories/${code}`);
+      setCategories(categories.filter((cat) => cat.code !== code));
+      setCards(cards.filter((card) => card.categoryCode !== code));
+      if (activeFilter === code) {
+        setActiveFilter("All");
+      }
+      alert("Категория и связанные услуги удалены");
+    } catch (err) {
+      console.error("Ошибка удаления категории:", err);
+      alert("Не удалось удалить категорию: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -138,7 +144,12 @@ export const Catalog = () => {
       setPriceError("");
       setNewCard((prev) => ({ ...prev, price: value }));
     } else if (name === "image") {
-      setNewCard((prev) => ({ ...prev, image: files[0] }));
+      const file = files[0];
+      if (file && ["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+        setNewCard((prev) => ({ ...prev, image: file }));
+      } else {
+        alert("Пожалуйста, выберите файл формата PNG, JPEG или JPG");
+      }
     } else {
       setNewCard((prev) => ({ ...prev, [name]: value }));
     }
@@ -155,8 +166,9 @@ export const Catalog = () => {
       alert("Исправьте цену перед сохранением");
       return;
     }
-    if (!authStore.isAuth || !authStore.token) {
+    if (!authStore.isAuth) {
       alert("Вы не авторизованы");
+      navigate("/Login");
       return;
     }
 
@@ -169,28 +181,14 @@ export const Catalog = () => {
     }
     formData.append("categoryCode", newCard.categoryCode);
 
-    console.log("FormData:", [...formData.entries()]);
-
     try {
-      const response = await fetch("http://localhost:8080/api/cards", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
-        },
-        body: formData,
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Ошибка добавления карточки: ${errorText}`);
-      }
-      const data = await response.json();
-      console.log("Ответ сервера:", data);
-      setCards([...cards, data]);
+      const response = await apiClient.post("/cards", formData);
+      setCards([...cards, response.data]);
       handleModalClose();
       alert("Карточка добавлена");
     } catch (err) {
       console.error("Ошибка добавления карточки:", err);
-      alert(`Не удалось добавить карточку: ${err.message}`);
+      alert("Не удалось добавить карточку: " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -204,32 +202,42 @@ export const Catalog = () => {
       setCategoryError("Код должен содержать только латинские буквы и цифры");
       return;
     }
-    if (!authStore.isAuth || !authStore.token) {
+    if (!authStore.isAuth) {
       alert("Вы не авторизованы");
+      navigate("/Login");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/categories", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${authStore.token || localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newCategory),
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Ошибка добавления категории: ${errorText}`);
-      }
-      const data = await response.json();
-      console.log("Категория создана:", data);
-      setCategories([...categories, data]);
+      const response = await apiClient.post("/categories", newCategory);
+      setCategories([...categories, response.data]);
       handleCategoryModalClose();
       alert("Категория добавлена");
     } catch (err) {
       console.error("Ошибка добавления категории:", err);
-      alert(`Не удалось добавить категорию: ${err.message}`);
+      alert("Не удалось добавить категорию: " + (err.response?.data?.message || err.message));
+    }
+  };
+
+  const handleBookAppointment = async (cardId) => {
+    if (!authStore.isAuth) {
+      alert("Пожалуйста, войдите в аккаунт для записи на приём");
+      navigate("/Login");
+      return;
+    }
+
+    if (isDoctorOrAdmin) {
+      alert("Запись доступна только пациентам.");
+      return;
+    }
+
+    try {
+      console.log("Sending appointment request with cardId:", cardId);
+      const response = await apiClient.post("/appointments", { cardId });
+      navigate(`/appointment/${response.data.id}`, { state: { appointment: response.data } });
+    } catch (err) {
+      console.error("Ошибка создания заявки:", err.response?.data || err.message);
+      alert(`Не удалось создать заявку: ${err.response?.data?.message || err.message}`);
     }
   };
 
@@ -244,35 +252,35 @@ export const Catalog = () => {
               <h1>Каталог услуг</h1>
             </div>
             <ul className="list">
-  {categories.map((cat) => (
-    <li
-      key={cat.code}
-      className={activeFilter === cat.code ? "active" : ""}
-    >
-      <span onClick={() => handleFilterClick(cat.code)}>{cat.name}</span>
-      {isAdmin && (
-        <button
-          className="delete-category-btn"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleDeleteCategory(cat.code);
-          }}
-          title="Удалить категорию"
-        >
-          <svg 
-            viewBox="0 0 24 24" 
-            width="16" 
-            height="16" 
-            fill="currentColor"
-            style={{ display: 'block' }}
-          >
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-          </svg>
-        </button>
-      )}
-    </li>
-  ))}
-</ul>
+              {categories.map((cat) => (
+                <li
+                  key={cat.code}
+                  className={activeFilter === cat.code ? "active" : ""}
+                >
+                  <span onClick={() => handleFilterClick(cat.code)}>{cat.name}</span>
+                  {isAdmin && (
+                    <button
+                      className="delete-category-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteCategory(cat.code);
+                      }}
+                      title="Удалить категорию"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        style={{ display: "block" }}
+                      >
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                      </svg>
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
             {isAdmin && (
               <div className="add-card-section">
                 <button className="add-btn" onClick={handleAddCard}>
@@ -293,13 +301,13 @@ export const Catalog = () => {
                 >
                   <div className="image_container">
                     <img
-                      src={card.image}
+                      src={getImageUrl(card.image)}
                       alt={card.title}
                       onError={(e) => {
-                        console.error(`Failed to load image: ${card.image}`);
-                        e.target.src = "http://localhost:5173/default.jpg";
+                        console.error(`Failed to load image: ${card.image}, URL: ${getImageUrl(card.image)}`);
+                        e.target.src = defaultImage;
                       }}
-                      onLoad={() => console.log(`Image loaded: ${card.image}`)}
+                      onLoad={() => console.log(`Image loaded: ${card.image}, URL: ${getImageUrl(card.image)}`)}
                     />
                   </div>
                   <div className="text_card_catalog">
@@ -309,7 +317,16 @@ export const Catalog = () => {
                       {formatPrice(card.price)} <span className="ruble-sign">₽</span>
                     </h3>
                     <div className="button_card">
-                      <Link to="/Entry">Записаться на прием</Link>
+                      {isDoctorOrAdmin ? (
+                        <p className="access-denied">Запись доступна только пациентам.</p>
+                      ) : (
+                        <button
+                          className="book-btn"
+                          onClick={() => handleBookAppointment(card.id)}
+                        >
+                          Записаться на приём
+                        </button>
+                      )}
                       {isAdmin && (
                         <>
                           <button

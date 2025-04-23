@@ -1,0 +1,229 @@
+/* AppointmentsStyle.css */
+
+.appointments-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    font-family: 'Poppins', sans-serif;
+}
+
+.appointments-container h1 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.appointments-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.appointment-item {
+    position: relative;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(90, 195, 254, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+/* Стили для статусов */
+.appointment-item[data-status="pending"],
+.appointment-item[data-status="ожидание"] {
+    border-left: 6px solid #F59E0B;
+    background: linear-gradient(to right, #FFFBEB 0%, #FFFFFF 15%);
+}
+
+.appointment-item[data-status="completed"] {
+    border-left: 6px solid #10B981;
+}
+
+.appointment-item[data-status="cancelled"] {
+    border-left: 6px solid #EF4444;
+}
+
+.appointment-item:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.card-horizontal {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem;
+}
+
+.card-image {
+    width: 220px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: relative;
+    padding-bottom: 3.5rem;
+}
+
+.card-content h3 {
+    font-size: 1.4rem;
+    color: #1e293b;
+    margin: 0;
+    font-weight: 600;
+}
+
+.card-price {
+    font-size: 1.2rem;
+    color: #10b981;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.card-content p {
+    color: #475569;
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+}
+
+/* Кнопка удаления - стабильная и центрированная */
+.delete-button-wrapper {
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.delete-button {
+    background: #fff;
+    color: #EF4444;
+    border: 2px solid #EF4444;
+    border-radius: 8px;
+    padding: 0.8rem 1.4rem;
+    cursor: pointer;
+    font-weight: 600;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+    transition: none;
+}
+
+.add-service-button {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background: linear-gradient(135deg, #5ac3fe 0%, #4da7e7 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-service-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(90, 195, 254, 0.4);
+}
+
+/* Адаптация для 992px */
+@media (max-width: 992px) {
+    .appointments-container {
+        padding: 1.5rem;
+    }
+    
+    .card-image {
+        width: 180px;
+        height: 140px;
+    }
+}
+
+/* Адаптация для 768px */
+@media (max-width: 768px) {
+    .appointments-container {
+        padding: 1.2rem;
+    }
+    
+    .appointments-container h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card-horizontal {
+        flex-direction: column;
+        gap: 1.2rem;
+        padding: 1.2rem;
+    }
+    
+    .card-image {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .delete-button {
+        max-width: none;
+    }
+}
+
+/* Адаптация для 576px */
+@media (max-width: 576px) {
+    .appointments-container {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+    
+    .appointments-container h1 {
+        font-size: 1.6rem;
+    }
+    
+    .card-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    .card-price {
+        font-size: 1.1rem;
+    }
+    
+    .delete-button {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .add-service-button {
+        padding: 0.9rem;
+        font-size: 1rem;
+    }
+}
+
+/* Стили для статусов */
+.status-pending {
+    color: #F59E0B !important;
+    font-weight: 600;
+}
+
+.status-completed {
+    color: #10B981 !important;
+    font-weight: 600;
+}
+
+.status-cancelled {
+    color: #EF4444 !important;
+    font-weight: 600;
+}
